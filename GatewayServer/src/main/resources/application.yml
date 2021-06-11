@@ -2,5 +2,12 @@ spring:
   application:
     name: api-gateway
   cloud:    gateway:      discovery:        locator:          enabled: true          lower-case-service-id: true      routes:      - id: course-service
-        uri: lb://course-service        predicates:        - Path=/api/course    loadbalancer:      ribbon:        enabled: false
+        uri: lb://course-service        predicates:        - Path=/api/course      default-filters:      - TokenRelay    loadbalancer:      ribbon:        enabled: false  security:    oauth2:      client:        provider:          keycloak:
+            issuer-uri: http://localhost:8180/auth/realms/everplatform-realm
+        registration:          spring-cloud-gateway-client:
+            client-id: spring-cloud-gateway-client
+            client-secret: 56db5d99-a2a0-4745-b7b1-b500d6ed03e5
+            provider: keycloak
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/spring-cloud-gateway-client
 eureka:  instance:    instance-id: ${spring.application.name}:${random.uuid}
