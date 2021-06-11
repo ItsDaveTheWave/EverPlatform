@@ -1,0 +1,1 @@
+insert into assignment(title, description) values('Equations', 'Use textbook if you need help'),('Science problem', 'Pages 22 and 23');
