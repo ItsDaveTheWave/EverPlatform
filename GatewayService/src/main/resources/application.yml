@@ -1,0 +1,43 @@
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8180/auth/realms/everplatform-realm
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            client-id: spring-cloud-gateway-client
+  cloud:
+    gateway:
+      default-filters:
+      - TokenRelay
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:4200"
+            allowedHeaders: "*"
+            allowedMethods:
+            - GET
+            - POST
+            - DELETE
+            - PUT
+            - PATCH
+            - OPTIONS
+      routes:
+      - id: course-service
+        uri: lb://course-service
+        predicates:
+        - Path=/api/course/**
+      - id: assignment-service
+        uri: lb://assignment-service
+        predicates:
+        - Path=/api/assignment/**
+      - id: webapp
+        uri: http://localhost:4200/**
+        predicates:        - Path=/**
+        filters:        - RemoveRequestHeader=Cookie  application:    name: gateway-service  main:    allow-bean-definition-overriding: true
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}
