@@ -1,11 +1,12 @@
 spring:
   application:
     name: api-gateway
-  cloud:    gateway:      discovery:        locator:          enabled: true          lower-case-service-id: true      routes:      - id: course-service
-        uri: lb://course-service        predicates:        - Path=/api/course
+  cloud:    gateway:      discovery:        locator:          enabled: true          lower-case-service-id: true      routes:
       - id: assignment-service
         uri: lb://assignment-service
-        predicates:        - Path=/api/assignment      default-filters:      - TokenRelay    loadbalancer:      ribbon:        enabled: false  security:    oauth2:      client:        provider:          keycloak:
+        predicates:
+        - Path=/api/assignment/**      - id: course-service
+        uri: lb://course-service        predicates:        - Path=/api/course/**      default-filters:      - TokenRelay    loadbalancer:      ribbon:        enabled: false    discovery:      enabled: true  security:    oauth2:      client:        provider:          keycloak:
             issuer-uri: http://localhost:8180/auth/realms/everplatform-realm
         registration:          spring-cloud-gateway-client:
             client-id: spring-cloud-gateway-client
