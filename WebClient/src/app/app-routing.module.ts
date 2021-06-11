@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CourseListComponent } from './components/course-list/course-list.component';
+import { AuthGuard } from './util/app.guard';
 
 const routes: Routes = [
-  { path: '', component: CourseListComponent },
+  { path: '', component: CourseListComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
