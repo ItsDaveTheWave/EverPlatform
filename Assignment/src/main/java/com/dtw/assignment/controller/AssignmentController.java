@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dtw.assignment.dto.AssignmentDto;
 import com.dtw.assignment.entity.Assignment;
 import com.dtw.assignment.service.AssignmentService;
+import com.dtw.commons.dto.AssignmentDto;
 
 @RestController
 @RequestMapping("/api/assignment")

@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dtw.commons.dto.AssignmentDto;
+import com.dtw.commons.dto.CourseDto;
 import com.dtw.course.client.AssignmentClient;
-import com.dtw.course.dto.AssignmentDto;
-import com.dtw.course.dto.CourseDto;
 import com.dtw.course.entity.Course;
 import com.dtw.course.service.CourseService;
 

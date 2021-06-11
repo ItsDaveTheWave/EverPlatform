@@ -2,8 +2,8 @@ package com.dtw.assignment.util;
 
 import org.springframework.core.convert.converter.Converter;
 
-import com.dtw.assignment.dto.AssignmentDto;
 import com.dtw.assignment.entity.Assignment;
+import com.dtw.commons.dto.AssignmentDto;
 
 public class DtoToAssignmentConverter implements Converter<AssignmentDto, Assignment> {
 

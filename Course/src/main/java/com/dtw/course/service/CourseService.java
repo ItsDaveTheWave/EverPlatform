@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
-import com.dtw.course.dto.CourseDto;
+import com.dtw.commons.dto.CourseDto;
 import com.dtw.course.entity.Course;
 import com.dtw.course.repo.CourseRepo;
 

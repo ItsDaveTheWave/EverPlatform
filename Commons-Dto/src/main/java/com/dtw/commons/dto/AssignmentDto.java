@@ -1,4 +1,4 @@
-package com.dtw.assignment.dto;
+package com.dtw.commons.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

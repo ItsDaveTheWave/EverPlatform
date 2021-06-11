@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
-import com.dtw.assignment.dto.AssignmentDto;
 import com.dtw.assignment.entity.Assignment;
 import com.dtw.assignment.repo.AssignmentRepo;
+import com.dtw.commons.dto.AssignmentDto;
 
 @Service
 public class AssignmentService {
