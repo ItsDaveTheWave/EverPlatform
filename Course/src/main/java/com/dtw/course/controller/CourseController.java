@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dtw.course.client.AssignmentClient;
+import com.dtw.course.dto.AssignmentDto;
 import com.dtw.course.dto.CourseDto;
 import com.dtw.course.entity.Course;
 import com.dtw.course.service.CourseService;
@@ -29,6 +31,9 @@ public class CourseController {
 	@Autowired
 	@Qualifier("mvcConversionService")
 	private ConversionService conversionService;
+	
+	@Autowired
+	private AssignmentClient assignmentClient;
 
 	@GetMapping
 	public ResponseEntity<List<CourseDto>> getAll() {
@@ -55,5 +60,10 @@ public class CourseController {
 
 		courseService.delete(id);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+	}
+	
+	@GetMapping("/assignment/{id}")
+	public ResponseEntity<AssignmentDto> getOneAssignment(@PathVariable Long id) {
+		return ResponseEntity.ok(assignmentClient.getOne(id));
 	}
 }
