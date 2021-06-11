@@ -1,0 +1,26 @@
+server:
+  port: 0
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}
+spring:
+  datasource:
+    url: jdbc:h2:mem:db
+    username: sa
+    password: 
+  application:
+    name: assignment-service
+  cloud:
+    config:
+      uri: http://localhost:8888
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/auth/realms/everplatform-realm
+management.endpoints.web.exposure.include: "*"
