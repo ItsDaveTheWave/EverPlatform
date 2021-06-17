@@ -18,9 +18,4 @@ spring:
     port: 5672
     username: guest
     password: guest
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8180/auth/realms/everplatform-realm
 management.endpoints.web.exposure.include: "*"
