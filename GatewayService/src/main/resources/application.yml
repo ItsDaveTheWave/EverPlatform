@@ -26,8 +26,8 @@ spring:
       - id: webapp
         uri: http://localhost:4200/**
         predicates:
-        - Path=/**  application:    name: gateway-service
+        - Path=/web/**    discovery:      enabled: true  application:    name: gateway-service
 eureka:
   instance:
-    instance-id: ${spring.application.name}:${random.uuid}
+    instance-id: ${spring.application.name}:${random.uuid}    prefer-ip-address: true
 management:  endpoints:    web:      exposure:        include:        - "*"

@@ -2,7 +2,7 @@ server:
   port: 0
 eureka:
   instance:
-    instance-id: ${spring.application.name}:${random.uuid}
+    instance-id: ${spring.application.name}:${random.uuid}    prefer-ip-address: true
 spring:
   datasource:
     url: jdbc:h2:mem:db
@@ -15,5 +15,5 @@ spring:
       uri: http://localhost:8888  rabbitmq:    host: localhost
     port: 5672
     username: guest
-    password: guest  security:    oauth2:      resourceserver:        jwt:          issuer-uri: http://localhost:8180/auth/realms/everplatform-realm
+    password: guest
 management.endpoints.web.exposure.include: "*"
