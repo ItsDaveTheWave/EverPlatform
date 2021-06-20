@@ -3,7 +3,11 @@ package com.dtw.assignment;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.context.annotation.Bean;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
+import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.dtw.assignment.util.AssignmentToDtoConverter;
@@ -11,6 +15,7 @@ import com.dtw.assignment.util.DtoToAssignmentConverter;
 
 @SpringBootApplication
 @EnableEurekaClient
+@EnableResourceServer
 public class AssignmentServiceApplication implements WebMvcConfigurer {
 
 	public static void main(String[] args) {
@@ -22,4 +27,13 @@ public class AssignmentServiceApplication implements WebMvcConfigurer {
 		registry.addConverter(new AssignmentToDtoConverter());
 		registry.addConverter(new DtoToAssignmentConverter());
 	}
+	
+	@Bean
+    public ResourceServerTokenServices tokenService() {
+        RemoteTokenServices tokenServices = new RemoteTokenServices();
+        tokenServices.setClientId("web");
+        tokenServices.setClientSecret("pass");
+        tokenServices.setCheckTokenEndpointUrl("http://localhost:8000/oauth/check_token");
+        return tokenServices;
+    }
 }
