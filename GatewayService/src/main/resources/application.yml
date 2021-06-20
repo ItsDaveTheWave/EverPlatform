@@ -22,7 +22,7 @@ spring:
       - id: assignment-service
         uri: lb://assignment-service
         predicates:
-        - Path=/api/assignment/**
+        - Path=/api/assignment/**      - id: auth-server        uri: lb://auth-server        predicates:        - Path=/oauth/**
       - id: webapp
         uri: http://localhost:4200/**
         predicates:
