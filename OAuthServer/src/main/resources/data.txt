@@ -1,0 +1,1 @@
+insert into user(username, password, name) values('pepe', '{bcrypt}$2y$12$QFlTYPFu3KUe8BGEWQ7ytetffIQ1fApEg5z70T9X2e3HF37Tb8NXO', 'Pepe');
