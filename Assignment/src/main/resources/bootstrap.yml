@@ -4,10 +4,14 @@ eureka:
   instance:
     instance-id: ${spring.application.name}:${random.uuid}    prefer-ip-address: true
 spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
   datasource:
-    url: jdbc:h2:mem:db
-    username: sa
-    password: 
+    url: jdbc:mysql://localhost:3306/assignment?createDatabaseIfNotExist=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
   application:
     name: assignment-service
   cloud:

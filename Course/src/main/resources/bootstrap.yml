@@ -5,9 +5,10 @@ eureka:
     instance-id: ${spring.application.name}:${random.uuid}    prefer-ip-address: true
 spring:
   datasource:
-    url: jdbc:h2:mem:db
-    username: sa
-    password: 
+    url: jdbc:mysql://localhost:3306/course?createDatabaseIfNotExist=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
   application:
     name: course-service
   cloud:
