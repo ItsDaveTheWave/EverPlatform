@@ -1,5 +1,7 @@
 package com.dtw.assignment.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
@@ -28,6 +30,12 @@ public class AssignmentController {
 	@Qualifier("mvcConversionService")
 	private ConversionService conversionService;
 
+	@GetMapping
+	public ResponseEntity<List<AssignmentDto>> getAll() {
+
+		return ResponseEntity.ok(assignmentService.toDtoList(assignmentService.getAll()));
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<AssignmentDto> getOne(@PathVariable Long id) {
 

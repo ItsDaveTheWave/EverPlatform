@@ -22,6 +22,10 @@ public class AssignmentService {
 	@Qualifier("mvcConversionService")
 	private ConversionService conversionService;
 	
+	public List<Assignment> getAll() {
+		return assignmentRepo.findAll();
+	}
+	
 	public Assignment getOne(Long id) {
 		return assignmentRepo.findById(id).get();
 	}
