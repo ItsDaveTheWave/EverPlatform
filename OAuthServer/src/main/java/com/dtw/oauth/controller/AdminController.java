@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dtw.oauth.repo.UserRepo;
 import com.dtw.oauth.entity.Role;
 import com.dtw.oauth.entity.User;
 import com.dtw.oauth.enums.RoleEnum;
+import com.dtw.oauth.repo.UserRepo;
 
 @RestController
-@RequestMapping("/oauth/user")
-public class UserController {
+@RequestMapping("/oauth/admin")
+public class AdminController {
 
 	@Autowired
 	private UserRepo userRepo;
@@ -31,7 +31,7 @@ public class UserController {
 	@PostMapping
 	public ResponseEntity<User> create(@Valid @RequestBody User user) {
 		Set<Role> roles = new HashSet<>();
-		roles.add(Role.builder().id(1L).name(RoleEnum.ROLE_USER).build());
+		roles.add(Role.builder().id(2L).name(RoleEnum.ROLE_ADMIN).build());
 		user.setRoles(roles);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return ResponseEntity.ok(userRepo.save(user));
