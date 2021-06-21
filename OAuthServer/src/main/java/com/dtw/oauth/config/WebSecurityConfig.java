@@ -31,6 +31,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
           .permitAll()
           .antMatchers("/oauth/admin/**")
           .permitAll()
+          .antMatchers("/oauth/student/**")
+          .permitAll()
+          .antMatchers("/oauth/teacher/**")
+          .permitAll()
           .anyRequest().authenticated()
           .and()
           .httpBasic();
