@@ -18,4 +18,6 @@ public class CourseDto {
 	private String description;
 	private Set<Long> assignments;
 	private String joinPassword;
+	private Set<Long> students;
+	private Set<Long> teachers;
 }

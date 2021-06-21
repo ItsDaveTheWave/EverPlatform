@@ -1,6 +1,8 @@
 package com.dtw.course.controller;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,6 +56,38 @@ public class CourseController {
 		return new ResponseEntity<CourseDto>(conversionService
 				.convert(courseService.create(conversionService.convert(course, Course.class)), CourseDto.class),
 				HttpStatus.CREATED);
+	}
+	
+	@PatchMapping("/{assignmentId}/{teacherId}")
+	public ResponseEntity<CourseDto> addTeacher(@PathVariable Long assignmentId, @PathVariable Long teacherId) {
+		Set<Long> teachers = new HashSet<>();
+		teachers.add(teacherId);
+		Course course = courseService.getOne(assignmentId);
+		course.setTeachers(teachers);
+		return ResponseEntity.ok(conversionService.convert(courseService.create(course), CourseDto.class));
+	}
+	
+	@PatchMapping("/{assignmentId}/{studentId}")
+	public ResponseEntity<CourseDto> addStudent(@PathVariable Long assignmentId, @PathVariable Long studentId) {
+		Set<Long> students = new HashSet<>();
+		students.add(studentId);
+		Course course = courseService.getOne(assignmentId);
+		course.setStudents(students);
+		return ResponseEntity.ok(conversionService.convert(courseService.create(course), CourseDto.class));
+	}
+	
+	@DeleteMapping("/{assignmentId}/{teacherId}")
+	public ResponseEntity<CourseDto> removeTeacher(@PathVariable Long assignmentId, @PathVariable Long teacherId) {
+		Course course = courseService.getOne(assignmentId);
+		course.getTeachers().remove(teacherId);
+		return ResponseEntity.ok(conversionService.convert(courseService.create(course), CourseDto.class));
+	}
+	
+	@DeleteMapping("/{assignmentId}/{studentId}")
+	public ResponseEntity<CourseDto> removeStudent(@PathVariable Long assignmentId, @PathVariable Long studentId) {
+		Course course = courseService.getOne(assignmentId);
+		course.getStudents().remove(studentId);
+		return ResponseEntity.ok(conversionService.convert(courseService.create(course), CourseDto.class));
 	}
 
 	@DeleteMapping("/{id}")
