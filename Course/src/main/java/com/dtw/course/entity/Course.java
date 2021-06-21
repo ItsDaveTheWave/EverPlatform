@@ -29,4 +29,6 @@ public class Course {
 	private String description;
 	@ElementCollection
 	private Set<Long> assignments;
+	@Column
+	private String joinPassword;
 }
