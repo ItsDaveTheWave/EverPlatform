@@ -40,7 +40,6 @@ public class User implements UserDetails {
 	private String password;
 	private String name;
 	private boolean enabled = true;
-	@Enumerated(EnumType.STRING)
 	@ManyToMany
 	@JoinTable(name = "user_role",
 			joinColumns = @JoinColumn(name = "user_id"),
