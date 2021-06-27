@@ -1,4 +1,4 @@
-package com.dtw.errorHandler;
+package com.dtw.errorHandler.error;
 
 import javax.validation.ConstraintViolation;
 

@@ -19,6 +19,10 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.dtw.errorHandler.error.ApiError;
+import com.dtw.errorHandler.error.ApiValidationError;
+import com.dtw.errorHandler.exception.EntityAlreadyExistsException;
+import com.dtw.errorHandler.exception.EntityNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)

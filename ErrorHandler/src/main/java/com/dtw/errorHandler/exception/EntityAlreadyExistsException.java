@@ -1,4 +1,4 @@
-package com.dtw.errorHandler;
+package com.dtw.errorHandler.exception;
 
 public class EntityAlreadyExistsException extends Exception{
 
