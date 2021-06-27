@@ -1,3 +1,0 @@
-insert into user(username, password, name) values('pepe', '{bcrypt}$2y$12$QFlTYPFu3KUe8BGEWQ7ytetffIQ1fApEg5z70T9X2e3HF37Tb8NXO', 'Pepe');
-insert into role(name) values ('ROLE_USER'), ('ROLE_ADMIN'), ('ROLE_STUDENT'), ('ROLE_TEACHER');
-insert into user_role(user_id, role_id) values(1,1);
