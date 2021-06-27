@@ -13,11 +13,13 @@ import { ToastrModule } from 'ngx-toastr';
 
 //components
 import { HomeComponent } from './component/home/home.component';
+import { LoginComponent } from './component/login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
