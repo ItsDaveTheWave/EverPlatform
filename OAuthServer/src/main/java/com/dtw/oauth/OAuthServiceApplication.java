@@ -5,9 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @SpringBootApplication
-public class OAuthService8Application extends WebSecurityConfigurerAdapter {
+public class OAuthServiceApplication extends WebSecurityConfigurerAdapter {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OAuthService8Application.class, args);
+		SpringApplication.run(OAuthServiceApplication.class, args);
 	}
 }
