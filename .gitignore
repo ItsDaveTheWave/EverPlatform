@@ -1,1 +1,7 @@
-/.metadata/
+target/
+bin/
+.mvn/
+.settings/
+.classpath
+.factorypath
+.project
