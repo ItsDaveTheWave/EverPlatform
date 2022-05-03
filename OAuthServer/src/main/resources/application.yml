@@ -1,12 +1,0 @@
-server:
-  port: 8000
-spring:
-  jpa:    hibernate:      ddl-auto: update
-  datasource:    url: jdbc:mysql://localhost:3306/oauth?createDatabaseIfNotExist=true
-    username: root
-    password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver  application:    name: auth-server
-eureka:
-  instance:
-    instance-id: ${spring.application.name}:${random.uuid}
-    prefer-ip-address: true
