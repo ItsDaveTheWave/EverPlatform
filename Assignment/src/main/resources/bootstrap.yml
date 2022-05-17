@@ -21,5 +21,8 @@ spring:
     host: localhost
     port: 5672
     username: guest
-    password: guest
+    password: guest  autoconfigure:    exclude:    - org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
 management.endpoints.web.exposure.include: "*"
+security:  oauth2:    resource:      token-info-uri: http://localhost:8282/oauth/check_token
+    client:      client-id: mobile
+      client-secret: pin
