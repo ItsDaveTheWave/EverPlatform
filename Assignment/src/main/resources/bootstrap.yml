@@ -4,14 +4,6 @@ eureka:
   instance:
     instance-id: ${spring.application.name}:${random.uuid}    prefer-ip-address: true
 spring:
-  jpa:
-    hibernate:
-      ddl-auto: update
-  datasource:
-    url: jdbc:mysql://localhost:3306/assignment?createDatabaseIfNotExist=true
-    username: root
-    password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
   application:
     name: assignment-service
   cloud:
@@ -21,7 +13,7 @@ spring:
     host: localhost
     port: 5672
     username: guest
-    password: guest  autoconfigure:    exclude:    - org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+    password: guest  autoconfigure:    exclude:    - org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration  profiles:    active:    - test
 management.endpoints.web.exposure.include: "*"
 security:  oauth2:    resource:      token-info-uri: http://localhost:8282/oauth/check_token
     client:      client-id: mobile
