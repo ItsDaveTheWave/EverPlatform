@@ -61,11 +61,6 @@ public class AssignmentController {
 				HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/homework")
-	public ResponseEntity<List<Homework>> getAllHomework() {
-		return ResponseEntity.ok(homeworkRepo.findAll());
-	}
-	
 	@GetMapping(value = "/homework/{assignmentId}/{userId}", produces = MediaType.ALL_VALUE)
 	public ResponseEntity<Resource> downloadHomework(@PathVariable Long assignmentId, @PathVariable Long userId) {
 		Homework homework = homeworkRepo.findByAssignmentIdAndUserId(assignmentId, userId)
