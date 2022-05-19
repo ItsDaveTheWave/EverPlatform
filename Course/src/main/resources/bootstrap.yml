@@ -13,8 +13,5 @@ spring:
     name: course-service
   cloud:
     config:
-      uri: http://localhost:8888  rabbitmq:    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+      uri: http://localhost:8888
 management.endpoints.web.exposure.include: "*"

@@ -41,7 +41,7 @@ public class AssignmentController {
 	@Autowired
 	@Qualifier("mvcConversionService")
 	private ConversionService conversionService;
-
+	
 	@GetMapping
 	public ResponseEntity<List<AssignmentDto>> getAll() {
 
