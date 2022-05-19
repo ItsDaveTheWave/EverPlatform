@@ -1,5 +1,4 @@
 server:  port: 8888
-
 spring:
   application:
-    name: config-server      cloud:    config:      server:        git:          uri: https://github.com/ItsDaveTheWave/EverPlatform          username:          password:          clone-on-start: true          search-paths: Properties
+    name: config-server  cloud:    config:      server:        git:                    uri: https://github.com/ItsDaveTheWave/EverPlatform/Properties          username:          password:          search-paths:          - 'assignment-service'
