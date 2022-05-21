@@ -62,7 +62,7 @@ public class AssignmentController {
 	}
 	
 	@GetMapping(value = "/homework/{assignmentId}/{userId}", produces = MediaType.ALL_VALUE)
-	public ResponseEntity<Resource> downloadHomework(@PathVariable Long assignmentId, @PathVariable Long userId) {
+	public ResponseEntity<Resource> getHomework(@PathVariable Long assignmentId, @PathVariable Long userId) {
 		Homework homework = homeworkRepo.findByAssignmentIdAndUserId(assignmentId, userId)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 		return new ResponseEntity<Resource>(new ByteArrayResource(homework.getFile()), HttpStatus.OK);
