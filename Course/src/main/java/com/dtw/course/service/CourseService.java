@@ -2,6 +2,7 @@ package com.dtw.course.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,8 +27,8 @@ public class CourseService {
 		return courseRepo.findAll();
 	}
 
-	public Course getOne(Long id) {
-		return courseRepo.findById(id).get();
+	public Optional<Course> getOne(Long id) {
+		return courseRepo.findById(id);
 	}
 
 	public Course create(Course course) {
@@ -35,7 +36,9 @@ public class CourseService {
 	}
 
 	public void delete(Long id) {
-		courseRepo.deleteById(id);
+		if(courseRepo.findById(id).isPresent()) {
+			courseRepo.deleteById(id);
+		}
 	}
 
 	public List<CourseDto> toDtoList(List<Course> courses) {

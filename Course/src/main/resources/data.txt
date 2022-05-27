@@ -1,1 +1,0 @@
-insert into course(name, joinPassword) values('math', 'mathIsFun'),('science', 'scienceIsFun');

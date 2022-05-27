@@ -9,6 +9,6 @@ public class AssignmentToDtoConverter implements Converter<Assignment, Assignmen
 
 	@Override
 	public AssignmentDto convert(Assignment source) {
-		return new AssignmentDto(source.getId(), source.getTitle(), source.getDescription());
+		return new AssignmentDto(source.getId(), source.getTitle(), source.getDescription(), source.getHomeworkIds());
 	}
 }
