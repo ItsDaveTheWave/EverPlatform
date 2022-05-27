@@ -1,6 +1,8 @@
 package com.dtw.assignment.entity;
+import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,4 +27,6 @@ public class Assignment {
 	private String title;
 	@Column
 	private String description;
+	@ElementCollection
+	private Set<Long> homeworkIds;
 }

@@ -1,10 +1,7 @@
 package com.dtw.commons.dto;
 
-import java.util.Set;
-
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.Positive;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -18,19 +15,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CourseDto {
+public class HomeworkDto {
 
 	@JsonProperty(access = Access.READ_ONLY)
 	private Long id;
 	@NotNull
-	@Length(min = 2, max = 20)
-	private String name;
 	@JsonProperty(access = Access.READ_ONLY)
-	private Set<Long> assignments;
+	private String bytes;
+	@NotNull
 	@JsonProperty(access = Access.READ_ONLY)
-	private Long teacherId;
+	private String fileName;
+	@NotNull
 	@JsonProperty(access = Access.READ_ONLY)
-	private Set<Long> studentsIds;
+	private String fileExtension;
+	@NotNull
+	@Positive
 	@JsonProperty(access = Access.READ_ONLY)
-	private String joinPassword;
+	private Long userId;
 }

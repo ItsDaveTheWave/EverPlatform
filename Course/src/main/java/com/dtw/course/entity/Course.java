@@ -25,14 +25,12 @@ public class Course {
 	private Long id;
 	@Column
 	private String name;
-	@Column
-	private String description;
 	@ElementCollection
 	private Set<Long> assignments;
 	@Column
+	private Long teacherId;
+	@ElementCollection
+	private Set<Long> studentsIds;
+	@Column
 	private String joinPassword;
-	@ElementCollection
-	private Set<Long> students;
-	@ElementCollection
-	private Set<Long> teachers;
 }

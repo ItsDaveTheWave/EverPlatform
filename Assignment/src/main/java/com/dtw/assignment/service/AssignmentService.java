@@ -2,6 +2,7 @@ package com.dtw.assignment.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,8 +27,8 @@ public class AssignmentService {
 		return assignmentRepo.findAll();
 	}
 	
-	public Assignment getOne(Long id) {
-		return assignmentRepo.findById(id).get();
+	public Optional<Assignment> getOne(Long id) {
+		return assignmentRepo.findById(id);
 	}
 	
 	public Assignment create(Assignment assignment) {
@@ -35,7 +36,9 @@ public class AssignmentService {
 	}
 	
 	public void delete(Long id) {
-		assignmentRepo.deleteById(id);
+		if(assignmentRepo.findById(id).isPresent()) {
+			assignmentRepo.deleteById(id);
+		}
 	}
 	
 	public List<AssignmentDto> toDtoList(List<Assignment> assignments) {
