@@ -11,10 +11,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootApplication
 @EnableFeignClients
 @EnableEurekaClient
-public class CourseAggregatorServiceApplication {
+public class CourseAggregatorApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CourseAggregatorServiceApplication.class, args);
+		SpringApplication.run(CourseAggregatorApplication.class, args);
 	}
 	
 	@Bean
