@@ -76,7 +76,7 @@ public class HomeworkController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<HomeworkDto> upload(@RequestParam(required = true) MultipartFile file, @RequestParam(required = true) Long userId) {
+	public ResponseEntity<HomeworkDto> upload(@RequestParam MultipartFile file, @RequestParam Long userId) {
 		
 		try {
 			String fileName = file.getOriginalFilename();
