@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dtw.commons.client.AssignmentClient;
 import com.dtw.commons.dto.AssignmentDto;
-import com.dtw.courseAggregator.client.AssignmentClient;
 
 @RestController
 @RequestMapping("/api/courseAggregator")

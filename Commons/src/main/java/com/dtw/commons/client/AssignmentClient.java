@@ -1,4 +1,4 @@
-package com.dtw.courseAggregator.client;
+package com.dtw.commons.client;
 
 import java.util.List;
 
