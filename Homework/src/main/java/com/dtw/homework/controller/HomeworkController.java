@@ -75,12 +75,13 @@ public class HomeworkController {
 		return ApiError.entityNotFound("Homework", "id", id).buildResponseEntity();
 	}
 	
-	@PostMapping
-	public ResponseEntity<HomeworkDto> upload(@RequestParam MultipartFile file, @RequestParam Long userId) {
+	@PostMapping("/{username}")
+	public ResponseEntity<HomeworkDto> upload(@RequestParam MultipartFile file, @PathVariable String username) {
 		
 		try {
 			String fileName = file.getOriginalFilename();
-			Homework homework = new Homework(1L, file.getBytes(), fileName.substring(0, fileName.lastIndexOf(".")), fileName.substring(fileName.lastIndexOf(".") + 1));
+			Homework homework = new Homework(1L, file.getBytes(), fileName.substring(0, fileName.lastIndexOf(".")),
+					fileName.substring(fileName.lastIndexOf(".") + 1), username);
 			homework.setId(null);
 			
 			return new ResponseEntity<HomeworkDto>(conversionService.convert(homeworkService.create(homework), HomeworkDto.class), HttpStatus.OK);

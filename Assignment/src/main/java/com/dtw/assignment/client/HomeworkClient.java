@@ -1,4 +1,4 @@
-package com.dtw.commons.client;
+package com.dtw.assignment.client;
 
 import java.util.List;
 
@@ -26,8 +26,8 @@ public interface HomeworkClient {
 	@GetMapping("/api/homework/{id}/download")
 	public ByteArrayResource download(@PathVariable Long id, @RequestHeader("Authorization") String token);
 	
-	@PostMapping("/api/homework")
-	public HomeworkDto upload(@RequestParam MultipartFile file, @RequestParam Long userId, @RequestHeader("Authorization") String token);
+	@PostMapping("/api/homework/{username}")
+	public HomeworkDto upload(@RequestParam MultipartFile file, @PathVariable String username, @RequestHeader("Authorization") String token);
 	
 	@DeleteMapping("/api/homework/{id}")
 	public Void delete(@PathVariable Long id, @RequestHeader("Authorization") String token);

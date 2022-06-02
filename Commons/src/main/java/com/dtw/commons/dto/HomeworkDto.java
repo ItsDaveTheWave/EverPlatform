@@ -2,6 +2,7 @@ package com.dtw.commons.dto;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -19,7 +20,7 @@ public class HomeworkDto {
 	@JsonProperty(access = Access.READ_ONLY)
 	private Long id;
 	@NotNull
-	@JsonProperty(access = Access.READ_ONLY)
+	@JsonIgnore
 	private String bytes;
 	@NotNull
 	@JsonProperty(access = Access.READ_ONLY)
@@ -27,4 +28,7 @@ public class HomeworkDto {
 	@NotNull
 	@JsonProperty(access = Access.READ_ONLY)
 	private String fileExtension;
+	@NotNull
+	@JsonProperty(access = Access.READ_ONLY)
+	private String username;
 }

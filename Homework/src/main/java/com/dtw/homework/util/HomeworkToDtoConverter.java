@@ -12,6 +12,6 @@ public class HomeworkToDtoConverter implements Converter<Homework, HomeworkDto> 
 
 	@Override
 	public HomeworkDto convert(Homework source) {
-		return new HomeworkDto(source.getId(), StandardCharsets.UTF_8.decode(ByteBuffer.wrap(source.getBytes())).toString(), source.getFileName(), source.getFileExtension());
+		return new HomeworkDto(source.getId(), StandardCharsets.UTF_8.decode(ByteBuffer.wrap(source.getBytes())).toString(), source.getFileName(), source.getFileExtension(), source.getUsername());
 	}
 }

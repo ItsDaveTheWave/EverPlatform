@@ -28,4 +28,6 @@ public class Homework {
 	private String fileName;
 	@Column
 	private String fileExtension;
+	@Column
+	private String username;
 }

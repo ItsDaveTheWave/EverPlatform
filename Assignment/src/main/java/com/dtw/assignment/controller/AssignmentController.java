@@ -31,7 +31,7 @@ public class AssignmentController {
 
 	@Autowired
 	private AssignmentService assignmentService;
-
+	
 	@Autowired
 	@Qualifier("mvcConversionService")
 	private ConversionService conversionService;
@@ -71,5 +71,12 @@ public class AssignmentController {
 		
 		assignmentService.delete(id);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+	}
+	
+	//homework
+	@GetMapping("/{id}/homework")
+	public ResponseEntity<?> getAllHomework(@PathVariable Long id) {
+
+		return null;
 	}
 }

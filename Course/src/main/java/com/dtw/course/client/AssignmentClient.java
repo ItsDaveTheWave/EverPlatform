@@ -1,4 +1,4 @@
-package com.dtw.commons.client;
+package com.dtw.course.client;
 
 import java.util.List;
 
