@@ -9,6 +9,6 @@ public class DtoToCourseConverter implements Converter<CourseDto, Course> {
 
 	@Override
 	public Course convert(CourseDto source) {
-		return new Course(source.getId(), source.getName(), source.getAssignments(), source.getTeacherId(), source.getStudentsIds(), source.getJoinPassword());
+		return new Course(source.getId(), source.getName(), source.getAssignments(), source.getJoinPassword());
 	}
 }

@@ -1,10 +1,10 @@
-package com.dtw.authServer.repo;
+package com.dtw.user.repo;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.dtw.authServer.entity.User;
+import com.dtw.user.entity.User;
 
 public interface UserRepo extends JpaRepository<User, Long> {
 

@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.dtw</groupId>
-	<artifactId>CourseAggregator</artifactId>
+	<artifactId>UserService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>CourseAggregator</name>
+	<name>UserService</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
@@ -20,16 +20,29 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>org.springframework.cloud</groupId>
-		    <artifactId>spring-cloud-starter-openfeign</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.dtw</groupId>
-			<artifactId>commons</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -45,17 +58,40 @@
 		</dependency>
 		<dependency>
 			<groupId>com.dtw</groupId>
-			<artifactId>errorHandler</artifactId>
+			<artifactId>commons</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
+			<groupId>com.dtw</groupId>
+			<artifactId>errorHandler</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	    <dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-validation</artifactId>
+		    <groupId>org.springframework.cloud</groupId>
+		    <artifactId>spring-cloud-starter-oauth2</artifactId>
+		    <version>2.2.5.RELEASE</version>
 		</dependency>
+		<!-- needed for oauth2 -->
+		<dependency>
+	        <groupId>com.sun.xml.bind</groupId>
+	        <artifactId>jaxb-core</artifactId>
+	        <version>2.3.0.1</version>
+	    </dependency>
+	    <!-- needed for oauth2 -->
+	    <dependency>
+	        <groupId>javax.xml.bind</groupId>
+	        <artifactId>jaxb-api</artifactId>
+	    </dependency>
+	    <!-- needed for oauth2 -->
+	    <dependency>
+	        <groupId>com.sun.xml.bind</groupId>
+	        <artifactId>jaxb-impl</artifactId>
+	        <version>2.3.1</version>
+	    </dependency>
 	</dependencies>
 
 	<dependencyManagement>

@@ -20,22 +20,10 @@ spring:
         uri: lb://course-service
         predicates:
         - Path=/api/course/**
-      - id: assignment-service
-        uri: lb://assignment-service
+      - id: user-service
+        uri: lb://user-service
         predicates:
-        - Path=/api/assignment/**
-      - id: homework-service
-        uri: lb://homework-service
-        predicates:
-        - Path=/api/homework/**
-      - id: course-aggregator-service
-        uri: lb://course-aggregator-service
-        predicates:
-        - Path=/api/courseAggregator/**
-      - id: auth-server
-        uri: lb://auth-server
-        predicates:
-        - Path=/oauth/**
+        - Path=/api/user/**
       - id: webapp
         uri: http://localhost:4200/**
         predicates:

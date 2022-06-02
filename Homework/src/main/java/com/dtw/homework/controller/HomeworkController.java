@@ -80,7 +80,7 @@ public class HomeworkController {
 		
 		try {
 			String fileName = file.getOriginalFilename();
-			Homework homework = new Homework(1L, file.getBytes(), fileName.substring(0, fileName.lastIndexOf(".")), fileName.substring(fileName.lastIndexOf(".") + 1), userId);
+			Homework homework = new Homework(1L, file.getBytes(), fileName.substring(0, fileName.lastIndexOf(".")), fileName.substring(fileName.lastIndexOf(".") + 1));
 			homework.setId(null);
 			
 			return new ResponseEntity<HomeworkDto>(conversionService.convert(homeworkService.create(homework), HomeworkDto.class), HttpStatus.OK);

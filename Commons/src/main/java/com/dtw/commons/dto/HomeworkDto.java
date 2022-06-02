@@ -1,7 +1,6 @@
 package com.dtw.commons.dto;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -28,8 +27,4 @@ public class HomeworkDto {
 	@NotNull
 	@JsonProperty(access = Access.READ_ONLY)
 	private String fileExtension;
-	@NotNull
-	@Positive
-	@JsonProperty(access = Access.READ_ONLY)
-	private Long userId;
 }

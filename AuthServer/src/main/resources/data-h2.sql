@@ -1,5 +1,5 @@
 INSERT INTO oauth_client_details (client_id, client_secret, web_server_redirect_uri, scope, access_token_validity, refresh_token_validity, resource_ids, authorized_grant_types, additional_information) VALUES 
-	('web', '{bcrypt}$2a$10$uc9J2qrtkKzdqhCfuL2y1etM4AoHWTTEfk80Q5p7/O850K/bu9I.y', 'http://localhost:8080/code', 'READ,WRITE', '3600', '10000', 'course,assignment', 'authorization_code,password,refresh_token,implicit', '{}');
+	('web', '{bcrypt}$2a$10$uc9J2qrtkKzdqhCfuL2y1etM4AoHWTTEfk80Q5p7/O850K/bu9I.y', 'http://localhost:8080/code', 'READ,WRITE', '3600', '10000', 'course,assignment,homework,user,course-aggregator', 'authorization_code,password,refresh_token,implicit', '{}');
 
 /* web-webpass */
 

@@ -13,3 +13,14 @@ spring:
       name: course
     discovery:
       enabled: true
+  autoconfigure:
+    exclude:
+    - org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+security:
+  oauth2:
+    resource:
+      token-info-uri: http://localhost:8282/oauth/check_token
+      id: course
+    client:
+      client-id: web
+      client-secret: webpass

@@ -28,9 +28,5 @@ public class Course {
 	@ElementCollection
 	private Set<Long> assignments;
 	@Column
-	private Long teacherId;
-	@ElementCollection
-	private Set<Long> studentsIds;
-	@Column
 	private String joinPassword;
 }

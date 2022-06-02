@@ -1,5 +1,6 @@
 package com.dtw.commons.dto;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.constraints.NotNull;
@@ -28,5 +29,6 @@ public class AssignmentDto {
 	@Length(min = 0, max = 250)
 	private String description;
 	@JsonProperty(access = Access.READ_ONLY)
-	private Set<Long> homeworkIds;
+	@Builder.Default
+	private Set<Long> homeworkIds = new HashSet<>();
 }

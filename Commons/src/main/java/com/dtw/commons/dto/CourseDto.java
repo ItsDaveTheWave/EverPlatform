@@ -1,5 +1,6 @@
 package com.dtw.commons.dto;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.constraints.NotNull;
@@ -26,11 +27,8 @@ public class CourseDto {
 	@Length(min = 2, max = 20)
 	private String name;
 	@JsonProperty(access = Access.READ_ONLY)
-	private Set<Long> assignments;
-	@JsonProperty(access = Access.READ_ONLY)
-	private Long teacherId;
-	@JsonProperty(access = Access.READ_ONLY)
-	private Set<Long> studentsIds;
+	@Builder.Default
+	private Set<Long> assignments = new HashSet<>();
 	@JsonProperty(access = Access.READ_ONLY)
 	private String joinPassword;
 }

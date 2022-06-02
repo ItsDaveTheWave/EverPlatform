@@ -1,4 +1,4 @@
-package com.dtw.authServer.entity;
+package com.dtw.user.entity;
 
 import java.io.Serializable;
 import java.util.List;
