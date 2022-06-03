@@ -50,11 +50,11 @@ public class User implements Serializable {
     private String email;
     @Column(name = "enabled")
     private boolean enabled;
-    @Column(name = "accountNonExpired")
+    @Column(name = "account_non_expired")
     private boolean accountNonExpired;
-    @Column(name = "credentialsNonExpired")
+    @Column(name = "credentials_non_expired")
     private boolean credentialsNonExpired;
-    @Column(name = "accountNonLocked")
+    @Column(name = "account_non_locked")
     private boolean accountNonLocked;
 
     @ManyToMany(fetch = FetchType.EAGER)
