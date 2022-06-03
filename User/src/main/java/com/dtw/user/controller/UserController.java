@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dtw.commons.dto.UserDto;
+import com.dtw.commons.enums.ReturnStatus;
 import com.dtw.errorHandler.error.ApiError;
 import com.dtw.user.entity.User;
 import com.dtw.user.service.UserService;
@@ -58,12 +59,12 @@ public class UserController {
 	@PostMapping("/admin")
 	public ResponseEntity<?> createAdmin(@RequestBody @Valid UserDto userDto) {
 		
-		Pair<Optional<User>, String> pair = userService.create(conversionService.convert(userDto, User.class), "ROLE_admin");
+		Pair<Optional<User>, ReturnStatus> pair = userService.create(conversionService.convert(userDto, User.class), "ROLE_admin");
 		if(!pair.getFirst().isPresent()) {
-			if(pair.getSecond().equals("username")) {
+			if(pair.getSecond() == ReturnStatus.USERNAME_NOT_FOUND) {
 				return ApiError.entityAlreadyExists("User", "username", userDto.getUsername()).buildResponseEntity();
 			}
-			if(pair.getSecond().equals("email")) {
+			if(pair.getSecond() == ReturnStatus.EMAIL_NOT_FOUND) {
 				return ApiError.entityAlreadyExists("User", "email", userDto.getEmail()).buildResponseEntity();		
 			}
 		}
@@ -74,12 +75,12 @@ public class UserController {
 	@PostMapping("/student")
 	public ResponseEntity<?> createStudent(@RequestBody @Valid UserDto userDto) {
 		
-		Pair<Optional<User>, String> pair = userService.create(conversionService.convert(userDto, User.class), "ROLE_student");
+		Pair<Optional<User>, ReturnStatus> pair = userService.create(conversionService.convert(userDto, User.class), "ROLE_student");
 		if(!pair.getFirst().isPresent()) {
-			if(pair.getSecond().equals("username")) {
+			if(pair.getSecond() == ReturnStatus.USERNAME_NOT_FOUND) {
 				return ApiError.entityAlreadyExists("User", "username", userDto.getUsername()).buildResponseEntity();
 			}
-			if(pair.getSecond().equals("email")) {
+			if(pair.getSecond() == ReturnStatus.EMAIL_NOT_FOUND) {
 				return ApiError.entityAlreadyExists("User", "email", userDto.getEmail()).buildResponseEntity();		
 			}
 		}
@@ -90,12 +91,12 @@ public class UserController {
 	@PostMapping("/teacher")
 	public ResponseEntity<?> createTeacher(@RequestBody @Valid UserDto userDto) {
 		
-		Pair<Optional<User>, String> pair = userService.create(conversionService.convert(userDto, User.class), "ROLE_teacher");
+		Pair<Optional<User>, ReturnStatus> pair = userService.create(conversionService.convert(userDto, User.class), "ROLE_teacher");
 		if(!pair.getFirst().isPresent()) {
-			if(pair.getSecond().equals("username")) {
+			if(pair.getSecond() == ReturnStatus.USERNAME_NOT_FOUND) {
 				return ApiError.entityAlreadyExists("User", "username", userDto.getUsername()).buildResponseEntity();
 			}
-			if(pair.getSecond().equals("email")) {
+			if(pair.getSecond() == ReturnStatus.EMAIL_NOT_FOUND) {
 				return ApiError.entityAlreadyExists("User", "email", userDto.getEmail()).buildResponseEntity();		
 			}
 		}

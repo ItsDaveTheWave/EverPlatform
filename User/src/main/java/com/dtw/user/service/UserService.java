@@ -8,6 +8,7 @@ import org.springframework.data.util.Pair;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.dtw.commons.enums.ReturnStatus;
 import com.dtw.user.entity.User;
 import com.dtw.user.repo.RoleRepo;
 import com.dtw.user.repo.UserRepo;
@@ -24,17 +25,17 @@ public class UserService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	public Pair<Optional<User>, String> create(User user, String role) {
+	public Pair<Optional<User>, ReturnStatus> create(User user, String role) {
 		if(userRepo.findByUsername(user.getUsername()).isPresent()) {
-			return Pair.of(Optional.empty(), "username");
+			return Pair.of(Optional.empty(), ReturnStatus.USERNAME_NOT_FOUND);
 		}
 		if(userRepo.findByEmail(user.getEmail()).isPresent()) {
-			return Pair.of(Optional.empty(), "email");
+			return Pair.of(Optional.empty(), ReturnStatus.EMAIL_NOT_FOUND);
 		}
 		
 		user.setRoles(Collections.singletonList(roleRepo.findByName(role).get()));
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		return Pair.of(Optional.of(userRepo.save(user)), "ok");
+		return Pair.of(Optional.of(userRepo.save(user)), ReturnStatus.OK);
 	}
 	
 	public Optional<User> findByUsername(String username) {

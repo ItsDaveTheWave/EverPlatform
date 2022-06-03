@@ -18,6 +18,7 @@ import com.dtw.assignment.entity.Assignment;
 import com.dtw.assignment.repo.AssignmentRepo;
 import com.dtw.commons.dto.AssignmentDto;
 import com.dtw.commons.dto.HomeworkDto;
+import com.dtw.commons.enums.ReturnStatus;
 
 @Service
 public class AssignmentService {
@@ -85,34 +86,34 @@ public class AssignmentService {
 		return Optional.of(homeworkList);
 	}
 	
-	public Pair<Optional<HomeworkDto>, String> getOneHomeworkFromAssignment(Long assignmentId, Long homeworkId, String token) {
+	public Pair<Optional<HomeworkDto>, ReturnStatus> getOneHomeworkFromAssignment(Long assignmentId, Long homeworkId, String token) {
 
 		Optional<Assignment> optAssignment = assignmentRepo.findById(assignmentId);
 		if(!optAssignment.isPresent()) {
-			return Pair.of(Optional.empty(), "notFound");
+			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_NOT_FOUND);
 		}
 		
 		if(!optAssignment.get().getHomeworkIds().contains(homeworkId)) {
-			return Pair.of(Optional.empty(), "doesntContain");
+			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY);
 		}
 		
 		HomeworkDto homework = homeworkClient.getOne(homeworkId, token);
-		return Pair.of(Optional.of(homework), "ok");
+		return Pair.of(Optional.of(homework), ReturnStatus.OK);
 	}
 	
-	public Pair<Optional<ByteArrayResource>, String> downloadOneHomeworkFromAssignment(Long assignmentId, Long homeworkId, String token) {
+	public Pair<Optional<ByteArrayResource>, ReturnStatus> downloadOneHomeworkFromAssignment(Long assignmentId, Long homeworkId, String token) {
 		
 		Optional<Assignment> optAssignment = assignmentRepo.findById(assignmentId);
 		if(!optAssignment.isPresent()) {
-			return Pair.of(Optional.empty(), "notFound");
+			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_NOT_FOUND);
 		}
 		
 		if(!optAssignment.get().getHomeworkIds().contains(homeworkId)) {
-			return Pair.of(Optional.empty(), "doesntContain");
+			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY);
 		}
 		
 		ByteArrayResource bytes = homeworkClient.download(homeworkId, token);		
-		return Pair.of(Optional.of(bytes), "ok");
+		return Pair.of(Optional.of(bytes), ReturnStatus.OK);
 	}
 	
 	public Optional<Assignment> uploadHomeworkToAssignment(Long assignmentId, MultipartFile file, String username, String token) {
@@ -131,16 +132,16 @@ public class AssignmentService {
 		return Optional.of(assignment);
 	}
 	
-	public String deleteHomeworkFromAssignment(Long assignmentId, Long homeworkId, String token) {
+	public ReturnStatus deleteHomeworkFromAssignment(Long assignmentId, Long homeworkId, String token) {
 		
 		Optional<Assignment> optAssignment = assignmentRepo.findById(assignmentId);
 		if(!optAssignment.isPresent()) {
-			return "notFound";
+			return ReturnStatus.ENTITY_NOT_FOUND;
 		}
 		
 		Assignment assignment = optAssignment.get();
 		if(!assignment.getHomeworkIds().contains(homeworkId)) {
-			return "doesntContain";
+			return ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY;
 		}
 		
 		homeworkClient.delete(homeworkId, token);
@@ -150,6 +151,6 @@ public class AssignmentService {
 		assignment.setHomeworkIds(homeworkIdSet);
 		assignmentRepo.save(assignment);
 		
-		return "ok";
+		return ReturnStatus.OK;
 	}
 }
