@@ -13,6 +13,8 @@ import com.dtw.assignment.util.AssignmentToDtoConverter;
 import com.dtw.assignment.util.DtoToAssignmentConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import feign.gson.GsonDecoder;
+
 @SpringBootApplication
 @EnableEurekaClient
 @EnableResourceServer
@@ -32,5 +34,10 @@ public class AssignmentServiceApplication implements WebMvcConfigurer {
 	@Bean
 	public ObjectMapper objectMapper() {
 		return new ObjectMapper();
+	}
+	
+	@Bean
+	public GsonDecoder gsonDecoder() {
+		return new GsonDecoder();
 	}
 }
