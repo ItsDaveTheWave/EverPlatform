@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +25,7 @@ public interface HomeworkClient {
 	public HomeworkDto getOne(@PathVariable Long id, @RequestHeader("Authorization") String token);
 	
 	@GetMapping("/api/homework/{id}/download")
-	public ByteArrayResource download(@PathVariable Long id, @RequestHeader("Authorization") String token);
+	public ResponseEntity<ByteArrayResource> download(@PathVariable Long id, @RequestHeader("Authorization") String token);
 	
 	@PostMapping("/api/homework/{username}")
 	public HomeworkDto upload(@RequestParam MultipartFile file, @PathVariable String username, @RequestHeader("Authorization") String token);

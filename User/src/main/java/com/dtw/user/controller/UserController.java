@@ -48,9 +48,7 @@ public class UserController {
 			if(optUser.isPresent()) {
 				return ResponseEntity.ok(conversionService.convert(optUser.get(), UserDto.class));
 			}
-			else {
-				return ApiError.entityNotFound("User", "username", username).buildResponseEntity();
-			}
+			return ApiError.entityNotFound("User", "username", username).buildResponseEntity();
 		}
 
 		throw new AccessDeniedException("Access denied");
@@ -60,13 +58,14 @@ public class UserController {
 	public ResponseEntity<?> createAdmin(@RequestBody @Valid UserDto userDto) {
 		
 		Pair<Optional<User>, ReturnStatus> pair = userService.create(conversionService.convert(userDto, User.class), "ROLE_admin");
-		if(!pair.getFirst().isPresent()) {
-			if(pair.getSecond() == ReturnStatus.USERNAME_NOT_FOUND) {
+		if(pair.getSecond() != ReturnStatus.OK) {
+			if(pair.getSecond() == ReturnStatus.USERNAME_ALREADY_EXISTS) {
 				return ApiError.entityAlreadyExists("User", "username", userDto.getUsername()).buildResponseEntity();
 			}
-			if(pair.getSecond() == ReturnStatus.EMAIL_NOT_FOUND) {
+			if(pair.getSecond() == ReturnStatus.EMAIL_ALREADY_EXISTS) {
 				return ApiError.entityAlreadyExists("User", "email", userDto.getEmail()).buildResponseEntity();		
 			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		
 		return new ResponseEntity<UserDto>(conversionService.convert(pair.getFirst().get(), UserDto.class), HttpStatus.CREATED);
@@ -76,13 +75,14 @@ public class UserController {
 	public ResponseEntity<?> createStudent(@RequestBody @Valid UserDto userDto) {
 		
 		Pair<Optional<User>, ReturnStatus> pair = userService.create(conversionService.convert(userDto, User.class), "ROLE_student");
-		if(!pair.getFirst().isPresent()) {
-			if(pair.getSecond() == ReturnStatus.USERNAME_NOT_FOUND) {
+		if(pair.getSecond() != ReturnStatus.OK) {
+			if(pair.getSecond() == ReturnStatus.USERNAME_ALREADY_EXISTS) {
 				return ApiError.entityAlreadyExists("User", "username", userDto.getUsername()).buildResponseEntity();
 			}
-			if(pair.getSecond() == ReturnStatus.EMAIL_NOT_FOUND) {
+			if(pair.getSecond() == ReturnStatus.EMAIL_ALREADY_EXISTS) {
 				return ApiError.entityAlreadyExists("User", "email", userDto.getEmail()).buildResponseEntity();		
 			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		
 		return new ResponseEntity<UserDto>(conversionService.convert(pair.getFirst().get(), UserDto.class), HttpStatus.CREATED);
@@ -92,13 +92,14 @@ public class UserController {
 	public ResponseEntity<?> createTeacher(@RequestBody @Valid UserDto userDto) {
 		
 		Pair<Optional<User>, ReturnStatus> pair = userService.create(conversionService.convert(userDto, User.class), "ROLE_teacher");
-		if(!pair.getFirst().isPresent()) {
-			if(pair.getSecond() == ReturnStatus.USERNAME_NOT_FOUND) {
+		if(pair.getSecond() != ReturnStatus.OK) {
+			if(pair.getSecond() == ReturnStatus.USERNAME_ALREADY_EXISTS) {
 				return ApiError.entityAlreadyExists("User", "username", userDto.getUsername()).buildResponseEntity();
 			}
-			if(pair.getSecond() == ReturnStatus.EMAIL_NOT_FOUND) {
+			if(pair.getSecond() == ReturnStatus.EMAIL_ALREADY_EXISTS) {
 				return ApiError.entityAlreadyExists("User", "email", userDto.getEmail()).buildResponseEntity();		
 			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		
 		return new ResponseEntity<UserDto>(conversionService.convert(pair.getFirst().get(), UserDto.class), HttpStatus.CREATED);

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.util.Pair;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -74,7 +75,7 @@ public class AssignmentService {
 	public Optional<List<HomeworkDto>> getAllHomeworkOfAssignment(Long assignmentId, String token) {
 		
 		Optional<Assignment> optAssignment = assignmentRepo.findById(assignmentId);
-		if(!optAssignment.isPresent()) {
+		if(optAssignment.isEmpty()) {
 			return Optional.empty();
 		}
 		
@@ -89,7 +90,7 @@ public class AssignmentService {
 	public Pair<Optional<HomeworkDto>, ReturnStatus> getOneHomeworkFromAssignment(Long assignmentId, Long homeworkId, String token) {
 
 		Optional<Assignment> optAssignment = assignmentRepo.findById(assignmentId);
-		if(!optAssignment.isPresent()) {
+		if(optAssignment.isEmpty()) {
 			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_NOT_FOUND);
 		}
 		
@@ -101,10 +102,10 @@ public class AssignmentService {
 		return Pair.of(Optional.of(homework), ReturnStatus.OK);
 	}
 	
-	public Pair<Optional<ByteArrayResource>, ReturnStatus> downloadOneHomeworkFromAssignment(Long assignmentId, Long homeworkId, String token) {
+	public Pair<Optional<ResponseEntity<ByteArrayResource>>, ReturnStatus> downloadOneHomeworkFromAssignment(Long assignmentId, Long homeworkId, String token) {
 		
 		Optional<Assignment> optAssignment = assignmentRepo.findById(assignmentId);
-		if(!optAssignment.isPresent()) {
+		if(optAssignment.isEmpty()) {
 			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_NOT_FOUND);
 		}
 		
@@ -112,15 +113,20 @@ public class AssignmentService {
 			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY);
 		}
 		
-		ByteArrayResource bytes = homeworkClient.download(homeworkId, token);		
-		return Pair.of(Optional.of(bytes), ReturnStatus.OK);
+		ResponseEntity<ByteArrayResource> downloadResponse = homeworkClient.download(homeworkId, token);		
+		return Pair.of(Optional.of(downloadResponse), ReturnStatus.OK);
 	}
 	
-	public Optional<Assignment> uploadHomeworkToAssignment(Long assignmentId, MultipartFile file, String username, String token) {
+	public Pair<Optional<Assignment>, ReturnStatus> uploadHomeworkToAssignment(Long assignmentId, MultipartFile file, String username, String token) {
 		
 		Optional<Assignment> optAssignment = assignmentRepo.findById(assignmentId);
-		if(!optAssignment.isPresent()) {
-			return Optional.empty();
+		if(optAssignment.isEmpty()) {
+			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_NOT_FOUND);
+		}
+
+		//check if any of the assignment's homework has the user name already
+		if(this.getAllHomeworkOfAssignment(assignmentId, token).get().stream().anyMatch(homework -> homework.getUsername().equals(username))) {
+			return Pair.of(Optional.empty(), ReturnStatus.USERNAME_ALREADY_EXISTS);
 		}
 		
 		HomeworkDto homework = homeworkClient.upload(file, username, token);
@@ -129,13 +135,13 @@ public class AssignmentService {
 		assignment.getHomeworkIds().add(homework.getId());
 		assignmentRepo.save(assignment);
 		
-		return Optional.of(assignment);
+		return Pair.of(Optional.of(assignment), ReturnStatus.OK);
 	}
 	
 	public ReturnStatus deleteHomeworkFromAssignment(Long assignmentId, Long homeworkId, String token) {
 		
 		Optional<Assignment> optAssignment = assignmentRepo.findById(assignmentId);
-		if(!optAssignment.isPresent()) {
+		if(optAssignment.isEmpty()) {
 			return ReturnStatus.ENTITY_NOT_FOUND;
 		}
 		
