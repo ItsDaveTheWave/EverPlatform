@@ -51,8 +51,12 @@ public class CourseService {
 		return courseRepo.save(course);
 	}
 
-	public void delete(Long id) {
-		if(courseRepo.findById(id).isPresent()) {
+	public void delete(Long id, String token) {
+		Optional<Course> optCourse = courseRepo.findById(id);
+		if(optCourse.isPresent()) {
+			for(Long assignmentId : optCourse.get().getAssignments()) {
+				assignmentClient.delete(assignmentId, token);
+			}
 			courseRepo.deleteById(id);
 		}
 	}

@@ -76,9 +76,9 @@ public class AssignmentController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id) {
+	public ResponseEntity<Void> delete(@PathVariable Long id, @RequestHeader("Authorization") String token) {
 		
-		assignmentService.delete(id);
+		assignmentService.delete(id, token);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 	

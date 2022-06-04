@@ -74,9 +74,9 @@ public class CourseController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id) {
+	public ResponseEntity<Void> delete(@PathVariable Long id, @RequestHeader("Authorization") String token) {
 
-		courseService.delete(id);
+		courseService.delete(id, token);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 	

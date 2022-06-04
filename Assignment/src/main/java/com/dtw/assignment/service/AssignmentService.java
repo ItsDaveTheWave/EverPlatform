@@ -57,28 +57,14 @@ public class AssignmentService {
 		return assignmentRepo.save(assignment);
 	}
 	
-	public void delete(Long id) {
-		if(assignmentRepo.findById(id).isPresent()) {
+	public void delete(Long id, String token) {
+		Optional<Assignment> optAssignment = assignmentRepo.findById(id);
+		if(optAssignment.isPresent()) {
+			for(Long homeworkId : optAssignment.get().getHomeworkIds()) {
+				homeworkClient.delete(homeworkId, token);
+			}
 			assignmentRepo.deleteById(id);
 		}
-	}
-	
-	public List<AssignmentDto> toDtoList(List<Assignment> assignments) {
-
-		List<AssignmentDto> res = new ArrayList<>();
-		for (Assignment assignment : assignments) {
-			res.add(conversionService.convert(assignment, AssignmentDto.class));
-		}
-		return res;
-	}
-
-	public List<Assignment> toEntityList(List<AssignmentDto> assignments) {
-
-		List<Assignment> res = new ArrayList<>();
-		for (AssignmentDto assignment : assignments) {
-			res.add(conversionService.convert(assignment, Assignment.class));
-		}
-		return res;
 	}
 	
 	//homework
@@ -177,5 +163,25 @@ public class AssignmentService {
 		assignmentRepo.save(assignment);
 		
 		return ReturnStatus.OK;
+	}
+	
+	
+	//util
+	public List<AssignmentDto> toDtoList(List<Assignment> assignments) {
+
+		List<AssignmentDto> res = new ArrayList<>();
+		for (Assignment assignment : assignments) {
+			res.add(conversionService.convert(assignment, AssignmentDto.class));
+		}
+		return res;
+	}
+
+	public List<Assignment> toEntityList(List<AssignmentDto> assignments) {
+
+		List<Assignment> res = new ArrayList<>();
+		for (AssignmentDto assignment : assignments) {
+			res.add(conversionService.convert(assignment, Assignment.class));
+		}
+		return res;
 	}
 }
