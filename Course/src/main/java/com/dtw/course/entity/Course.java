@@ -27,6 +27,10 @@ public class Course {
 	private String name;
 	@ElementCollection
 	private Set<Long> assignments;
+	@ElementCollection
+	private Set<String> students;
+	@Column
+	private String teacher;
 	@Column
 	private String joinPassword;
 }

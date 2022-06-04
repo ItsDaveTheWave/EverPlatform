@@ -30,5 +30,10 @@ public class CourseDto {
 	@Builder.Default
 	private Set<Long> assignments = new HashSet<>();
 	@JsonProperty(access = Access.READ_ONLY)
+	@Builder.Default
+	private Set<String> students = new HashSet<>();
+	@JsonProperty(access = Access.READ_ONLY)
+	private String teacher;
+	@JsonProperty(access = Access.READ_ONLY)
 	private String joinPassword;
 }

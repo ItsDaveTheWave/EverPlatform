@@ -13,6 +13,8 @@ import com.dtw.course.util.CourseToDtoConverter;
 import com.dtw.course.util.DtoToCourseConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import feign.gson.GsonDecoder;
+
 @SpringBootApplication
 @EnableEurekaClient
 @EnableResourceServer
@@ -32,5 +34,10 @@ public class CourseApplication implements WebMvcConfigurer {
 	@Bean
 	public ObjectMapper objectMapper() {
 		return new ObjectMapper();
+	}
+	
+	@Bean
+	public GsonDecoder gsonDecoder() {
+		return new GsonDecoder();
 	}
 }
