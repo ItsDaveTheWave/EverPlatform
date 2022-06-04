@@ -23,10 +23,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		
 		http
 			.authorizeRequests()
+			.antMatchers(HttpMethod.GET, "/api/user").hasAnyRole("admin")
+			.antMatchers(HttpMethod.GET, "/api/user/{username}").authenticated()
 			.antMatchers(HttpMethod.POST, "/api/user/admin").hasAnyRole("admin")
 			.antMatchers(HttpMethod.POST, "/api/user/student").permitAll()
 			.antMatchers(HttpMethod.POST, "/api/user/teacher").permitAll()
-			.antMatchers(HttpMethod.GET, "/api/user/{username}").authenticated()
 			.antMatchers("/h2-console").permitAll()
 			.and()
 			.formLogin().disable()

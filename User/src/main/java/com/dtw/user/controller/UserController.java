@@ -1,5 +1,6 @@
 package com.dtw.user.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -39,12 +40,23 @@ public class UserController {
 	@Qualifier("mvcConversionService")
 	private ConversionService conversionService;
 	
+	@GetMapping
+	public ResponseEntity<List<UserDto>> getAllUser() {
+
+		List<UserDto> courseList = userService.toDtoList(userService.getAll());
+		if(courseList.size() == 0) {
+			return new ResponseEntity<List<UserDto>>(HttpStatus.NO_CONTENT);
+		}
+		
+		return ResponseEntity.ok(courseList);
+	}
+	
 	@GetMapping("/{username}")
-	public ResponseEntity<?> getUser(@PathVariable String username, OAuth2Authentication auth) {
+	public ResponseEntity<?> getOneUser(@PathVariable String username, OAuth2Authentication auth) {
 		
 		if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_admin")) ||
 				username.equals(auth.getPrincipal())) {
-			Optional<User> optUser = userService.findByUsername(username);
+			Optional<User> optUser = userService.getOneByUsername(username);
 			if(optUser.isPresent()) {
 				return ResponseEntity.ok(conversionService.convert(optUser.get(), UserDto.class));
 			}
