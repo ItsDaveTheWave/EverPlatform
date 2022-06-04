@@ -151,16 +151,14 @@ public class AssignmentService {
 		}
 		
 		Assignment assignment = optAssignment.get();
-		if(!assignment.getHomeworkIds().contains(homeworkId)) {
-			return ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY;
+		if(assignment.getHomeworkIds().contains(homeworkId)) {
+			homeworkClient.delete(homeworkId, token);
+			
+			Set<Long> homeworkIdSet = assignment.getHomeworkIds();
+			homeworkIdSet.remove(homeworkId);
+			assignment.setHomeworkIds(homeworkIdSet);
+			assignmentRepo.save(assignment);
 		}
-		
-		homeworkClient.delete(homeworkId, token);
-		
-		Set<Long> homeworkIdSet = assignment.getHomeworkIds();
-		homeworkIdSet.remove(homeworkId);
-		assignment.setHomeworkIds(homeworkIdSet);
-		assignmentRepo.save(assignment);
 		
 		return ReturnStatus.OK;
 	}

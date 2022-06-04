@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -120,6 +121,30 @@ public class CourseService {
 		course.getAssignments().add(savedAssignment.getId());
 		
 		return Pair.of(Optional.of(courseRepo.save(course)), ReturnStatus.OK);
+	}
+	
+	public ReturnStatus deleteAssignmentOfCourse(Long courseId, Long assignmentId, String token, OAuth2Authentication auth) {
+		
+		Optional<Course> optCourse = courseRepo.findById(courseId);
+		if(optCourse.isEmpty()) {
+			return ReturnStatus.ENTITY_NOT_FOUND;
+		}
+		
+		Course course = optCourse.get();
+		if(!(isAdmin(auth) || (isTeacher(auth) && isEnrolledInCourse(course, (String) auth.getPrincipal())))) {
+			return ReturnStatus.FORBIDDEN;
+		}
+		
+		if(course.getAssignments().contains(assignmentId)) {
+			assignmentClient.delete(assignmentId, token);
+			
+			Set<Long> assignmentSet = course.getAssignments();
+			assignmentSet.remove(assignmentId);
+			course.setAssignments(assignmentSet);
+			courseRepo.save(course);
+		}
+		
+		return ReturnStatus.OK;
 	}
 	
 	

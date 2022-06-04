@@ -82,7 +82,7 @@ public class CourseController {
 	
 	//assignment
 	@GetMapping("/{id}/assignment")
-	public ResponseEntity<?> getAllAssignmentOfCourse(@PathVariable Long id, @RequestHeader("Authorization") String token, 
+	public ResponseEntity<?> getAllAssignmentFromCourse(@PathVariable Long id, @RequestHeader("Authorization") String token, 
 			OAuth2Authentication auth) {
 		
 		Pair<Optional<List<AssignmentDto>>, ReturnStatus> pair;		
@@ -112,7 +112,7 @@ public class CourseController {
 	}
 	
 	@GetMapping("/{id}/assignment/{assignmentId}")
-	public ResponseEntity<?> getAllAssignmentOfCourse(@PathVariable Long id, @PathVariable Long assignmentId, 
+	public ResponseEntity<?> getOneAssignmentFromCourse(@PathVariable Long id, @PathVariable Long assignmentId, 
 			@RequestHeader("Authorization") String token, OAuth2Authentication auth) {
 		
 		Pair<Optional<AssignmentDto>, ReturnStatus> pair;
@@ -162,5 +162,20 @@ public class CourseController {
 		}
 		
 		return ResponseEntity.ok(conversionService.convert(pair.getFirst().get(), CourseDto.class));
+	}
+	
+	@DeleteMapping("/{id}/assignment/{assignmentId}")
+	public ResponseEntity<?> deleteAssignmentFromCourse(@PathVariable Long id, @PathVariable Long assignmentId, 
+			@RequestHeader("Authorization") String token, OAuth2Authentication auth) {
+		
+		ReturnStatus returnStatus = courseService.deleteAssignmentOfCourse(id, assignmentId, token, auth);
+		if(returnStatus != ReturnStatus.OK) {
+			if(returnStatus == ReturnStatus.ENTITY_NOT_FOUND) {
+				return ApiError.entityNotFound("Course", "id", id).buildResponseEntity();
+			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 }

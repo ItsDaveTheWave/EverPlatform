@@ -192,9 +192,6 @@ public class AssignmentController {
 			if(returnStatus == ReturnStatus.ENTITY_NOT_FOUND) {
 				return ApiError.entityNotFound("Assignment", "id", id).buildResponseEntity();
 			}
-			if(returnStatus == ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY) {
-				return ApiError.entityDoesntContainEntity("Assignment", "Homework", "id", homeworkId).buildResponseEntity();
-			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		

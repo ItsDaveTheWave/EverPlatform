@@ -27,6 +27,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 			.antMatchers(HttpMethod.DELETE, "/api/course/{id}").hasAnyRole("admin", "teacher")
 			.antMatchers(HttpMethod.GET, "/api/course/{id}/assignment").hasAnyRole("admin", "teacher", "student")
 			.antMatchers(HttpMethod.GET, "/api/course/{id}/assignment/{assignmentId}").hasAnyRole("admin", "teacher", "student")
+			.antMatchers(HttpMethod.POST, "/api/course/{id}/assignment").hasAnyRole("admin", "teacher")
+			.antMatchers(HttpMethod.DELETE, "/api/course/{id}/assignment/{assignmentId}").hasAnyRole("admin", "teacher")
 			.antMatchers("/h2-console").permitAll()
 			.and()
 			.formLogin().disable()
