@@ -99,6 +99,25 @@ public class CourseService {
 		return Pair.of(Optional.of(assignment), ReturnStatus.OK);
 	}
 	
+	public Pair<Optional<Course>, ReturnStatus> addAssignmentToCourse(Long courseId, AssignmentDto assignmentDto, String token, 
+			OAuth2Authentication auth) throws IOException {
+		
+		Optional<Course> optCourse = courseRepo.findById(courseId);
+		if(optCourse.isEmpty()) {
+			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_NOT_FOUND);
+		}
+		
+		if(!(isAdmin(auth) || (isTeacher(auth) && isEnrolledInCourse(optCourse.get(), (String) auth.getPrincipal())))) {
+			return Pair.of(Optional.empty(), ReturnStatus.FORBIDDEN);
+		}
+		
+		AssignmentDto savedAssignment = (AssignmentDto) gsonDecoder.decode(assignmentClient.create(assignmentDto, token), AssignmentDto.class);
+		Course course = optCourse.get();
+		course.getAssignments().add(savedAssignment.getId());
+		
+		return Pair.of(Optional.of(courseRepo.save(course)), ReturnStatus.OK);
+	}
+	
 	
 	//util
 	public List<CourseDto> toDtoList(List<Course> courses) {

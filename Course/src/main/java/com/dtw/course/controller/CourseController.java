@@ -138,4 +138,29 @@ public class CourseController {
 		
 		return ResponseEntity.ok(pair.getFirst().get());
 	}
+	
+	@PostMapping("/{id}/assignment")
+	public ResponseEntity<?> addAssignmentToCourse(@PathVariable Long id, @RequestBody @Valid AssignmentDto assignment,
+			@RequestHeader("Authorization") String token, OAuth2Authentication auth) {
+		
+		Pair<Optional<Course>, ReturnStatus> pair;
+		try {
+			pair = courseService.addAssignmentToCourse(id, assignment, token, auth);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		
+		if(pair.getSecond() != ReturnStatus.OK) {
+			if(pair.getSecond() == ReturnStatus.ENTITY_NOT_FOUND) {
+				return ApiError.entityNotFound("Course", "id", id).buildResponseEntity();
+			}
+			if(pair.getSecond() == ReturnStatus.FORBIDDEN) {
+				throw new AccessDeniedException("Access denied");
+			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		
+		return ResponseEntity.ok(conversionService.convert(pair.getFirst().get(), CourseDto.class));
+	}
 }
