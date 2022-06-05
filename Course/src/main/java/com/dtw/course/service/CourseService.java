@@ -261,6 +261,29 @@ public class CourseService {
 		return Pair.of(Optional.of(optCourse.get()), ReturnStatus.OK);
 	}
 	
+	public ReturnStatus deleteHomeworkFromAssignmentOfCourse(Long courseId, Long assignmentId, Long homeworkId, String token, OAuth2Authentication auth) {
+		
+		Optional<Course> optCourse = courseRepo.findById(courseId);
+		if(optCourse.isEmpty()) {
+			return ReturnStatus.ENTITY_NOT_FOUND;
+		}
+		
+		Course course = optCourse.get();
+		if(!course.getAssignments().contains(assignmentId)) {
+			return ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY;
+		}
+		
+		//TODO: if if returns empty doest contain entity, return ok
+		HomeworkDto homework = assignmentClient.getOneHomeworkFromAssigment(assignmentId, homeworkId, token);
+		if(!(isAdmin(auth) || (isStudent(auth) && isEnrolledInCourse(course, (String) auth.getPrincipal()) 
+				&& homework.getUsername().equals((String) auth.getPrincipal())))) {
+			return ReturnStatus.FORBIDDEN;
+		}
+		
+		assignmentClient.deleteHomeworkFromAssignment(assignmentId, homeworkId, token);
+		return ReturnStatus.OK;
+	}
+	
 	//util
 	public String getAdminToken() throws JsonMappingException, JsonProcessingException {
 		HttpHeaders headers = new HttpHeaders();

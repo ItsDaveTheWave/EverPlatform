@@ -276,4 +276,25 @@ public class CourseController {
 		
 		return ResponseEntity.ok(pair.getFirst().get());
 	}
+	
+	@DeleteMapping("/{id}/assignment/{assignmentId}/homework/{homeworkId}")
+	public ResponseEntity<?> deleteHomeworkFromAssignmentOfCourse(@PathVariable Long id, @PathVariable Long assignmentId, 
+			@PathVariable Long homeworkId, @RequestHeader("Authorization") String token, OAuth2Authentication auth) {
+		
+		ReturnStatus returnStatus = courseService.deleteHomeworkFromAssignmentOfCourse(id, assignmentId, homeworkId, token, auth);
+		if(returnStatus != ReturnStatus.OK) {
+			if(returnStatus == ReturnStatus.ENTITY_NOT_FOUND) {
+				return ApiError.entityNotFound("Course", "id", id).buildResponseEntity();
+			}
+			if(returnStatus == ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY) {
+				return ApiError.entityDoesntContainEntity("Course", "Assignment", "id", assignmentId).buildResponseEntity();
+			}
+			if(returnStatus == ReturnStatus.FORBIDDEN) {
+				throw new AccessDeniedException("Access denied");
+			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+	}
 }
