@@ -44,10 +44,10 @@ public class UserService {
 	
 	public Pair<Optional<User>, ReturnStatus> create(User user, String role) {
 		if(userRepo.findByUsername(user.getUsername()).isPresent()) {
-			return Pair.of(Optional.empty(), ReturnStatus.USERNAME_ALREADY_EXISTS);
+			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_WITH_USERNAME_ALREADY_EXISTS);
 		}
 		if(userRepo.findByEmail(user.getEmail()).isPresent()) {
-			return Pair.of(Optional.empty(), ReturnStatus.EMAIL_ALREADY_EXISTS);
+			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_WITH_EMAIL_ALREADY_EXISTS);
 		}
 		
 		user.setRoles(Collections.singletonList(roleRepo.findByName(role).get()));

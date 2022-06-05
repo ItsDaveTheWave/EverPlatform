@@ -71,10 +71,10 @@ public class UserController {
 		
 		Pair<Optional<User>, ReturnStatus> pair = userService.create(conversionService.convert(userDto, User.class), "ROLE_admin");
 		if(pair.getSecond() != ReturnStatus.OK) {
-			if(pair.getSecond() == ReturnStatus.USERNAME_ALREADY_EXISTS) {
+			if(pair.getSecond() == ReturnStatus.ENTITY_WITH_USERNAME_ALREADY_EXISTS) {
 				return ApiError.entityAlreadyExists("User", "username", userDto.getUsername()).buildResponseEntity();
 			}
-			if(pair.getSecond() == ReturnStatus.EMAIL_ALREADY_EXISTS) {
+			if(pair.getSecond() == ReturnStatus.ENTITY_WITH_EMAIL_ALREADY_EXISTS) {
 				return ApiError.entityAlreadyExists("User", "email", userDto.getEmail()).buildResponseEntity();		
 			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -88,10 +88,10 @@ public class UserController {
 		
 		Pair<Optional<User>, ReturnStatus> pair = userService.create(conversionService.convert(userDto, User.class), "ROLE_student");
 		if(pair.getSecond() != ReturnStatus.OK) {
-			if(pair.getSecond() == ReturnStatus.USERNAME_ALREADY_EXISTS) {
+			if(pair.getSecond() == ReturnStatus.ENTITY_WITH_USERNAME_ALREADY_EXISTS) {
 				return ApiError.entityAlreadyExists("User", "username", userDto.getUsername()).buildResponseEntity();
 			}
-			if(pair.getSecond() == ReturnStatus.EMAIL_ALREADY_EXISTS) {
+			if(pair.getSecond() == ReturnStatus.ENTITY_WITH_EMAIL_ALREADY_EXISTS) {
 				return ApiError.entityAlreadyExists("User", "email", userDto.getEmail()).buildResponseEntity();		
 			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -105,10 +105,10 @@ public class UserController {
 		
 		Pair<Optional<User>, ReturnStatus> pair = userService.create(conversionService.convert(userDto, User.class), "ROLE_teacher");
 		if(pair.getSecond() != ReturnStatus.OK) {
-			if(pair.getSecond() == ReturnStatus.USERNAME_ALREADY_EXISTS) {
+			if(pair.getSecond() == ReturnStatus.ENTITY_WITH_USERNAME_ALREADY_EXISTS) {
 				return ApiError.entityAlreadyExists("User", "username", userDto.getUsername()).buildResponseEntity();
 			}
-			if(pair.getSecond() == ReturnStatus.EMAIL_ALREADY_EXISTS) {
+			if(pair.getSecond() == ReturnStatus.ENTITY_WITH_EMAIL_ALREADY_EXISTS) {
 				return ApiError.entityAlreadyExists("User", "email", userDto.getEmail()).buildResponseEntity();		
 			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

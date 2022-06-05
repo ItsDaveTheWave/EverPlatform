@@ -174,7 +174,7 @@ public class AssignmentController {
 			if(pair.getSecond() == ReturnStatus.ENTITY_NOT_FOUND) {
 				return ApiError.entityNotFound("Assignment", "id", id).buildResponseEntity();
 			}
-			if(pair.getSecond() == ReturnStatus.USERNAME_ALREADY_EXISTS) {
+			if(pair.getSecond() == ReturnStatus.ENTITY_WITH_USERNAME_ALREADY_EXISTS) {
 				return ApiError.entityAlreadyContainsEntity("Assignment", "Homework", "username", username).buildResponseEntity();
 			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

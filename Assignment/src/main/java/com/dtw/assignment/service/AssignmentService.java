@@ -131,7 +131,7 @@ public class AssignmentService {
 
 		//check if any of the assignment's homework has the user name already
 		if(this.getAllHomeworkOfAssignment(assignmentId, token).get().stream().anyMatch(homework -> homework.getUsername().equals(username))) {
-			return Pair.of(Optional.empty(), ReturnStatus.USERNAME_ALREADY_EXISTS);
+			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_WITH_USERNAME_ALREADY_EXISTS);
 		}
 		
 		HomeworkDto homework = (HomeworkDto) gsonDecoder.decode(homeworkClient.upload(file, username, token), HomeworkDto.class);

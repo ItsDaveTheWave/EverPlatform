@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dtw.commons.dto.AssignmentDto;
 import com.dtw.commons.dto.CourseDto;
+import com.dtw.commons.dto.HomeworkDto;
 import com.dtw.commons.enums.ReturnStatus;
 import com.dtw.course.entity.Course;
 import com.dtw.course.service.CourseService;
@@ -177,5 +178,68 @@ public class CourseController {
 		}
 		
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+	}
+	
+	
+	//homework
+	@GetMapping("/{id}/assignment/{assignmentId}/homework")
+	public ResponseEntity<?> getAllHomeworkFromAssignmentOfCourse(@PathVariable Long id, @PathVariable Long assignmentId, 
+			@RequestHeader("Authorization") String token, OAuth2Authentication auth) {
+		
+		Pair<Optional<List<HomeworkDto>>, ReturnStatus> pair;
+		try {
+			pair = courseService.getAllHomeworkOfAssignmentOfCourse(id, assignmentId, token, auth);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		
+		if(pair.getSecond() != ReturnStatus.OK) {
+			if(pair.getSecond() == ReturnStatus.ENTITY_NOT_FOUND) {
+				return ApiError.entityNotFound("Course", "id", id).buildResponseEntity();
+			}
+			if(pair.getSecond() == ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY) {
+				return ApiError.entityDoesntContainEntity("Course", "Assignment", "id", assignmentId).buildResponseEntity();
+			}
+			if(pair.getSecond() == ReturnStatus.FORBIDDEN) {
+				throw new AccessDeniedException("Access denied");
+			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		
+		List<HomeworkDto> homeworkList = pair.getFirst().get();
+		if(homeworkList.size() == 0) {
+			return new ResponseEntity<List<HomeworkDto>>(HttpStatus.NO_CONTENT);
+		}
+		
+		return ResponseEntity.ok(homeworkList);
+	}
+	
+	@GetMapping("/{id}/assignment/{assignmentId}/homework/{homeworkId}")
+	public ResponseEntity<?> getOneHomeworkFromAssignmentFromCourse(@PathVariable Long id, @PathVariable Long assignmentId, 
+			@PathVariable Long homeworkId, @RequestHeader("Authorization") String token, OAuth2Authentication auth) {
+		
+		Pair<Optional<HomeworkDto>, ReturnStatus> pair;
+		try {
+			pair = courseService.getOneHomeworkOfAssignmentFromCourse(id, assignmentId, homeworkId, token, auth);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		
+		if(pair.getSecond() != ReturnStatus.OK) {
+			if(pair.getSecond() == ReturnStatus.ENTITY_NOT_FOUND) {
+				return ApiError.entityNotFound("Course", "id", id).buildResponseEntity();
+			}
+			if(pair.getSecond() == ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY) {
+				return ApiError.entityDoesntContainEntity("Course", "Assignment", "id", assignmentId).buildResponseEntity();
+			}
+			if(pair.getSecond() == ReturnStatus.FORBIDDEN) {
+				throw new AccessDeniedException("Access denied");
+			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		
+		return ResponseEntity.ok(pair.getFirst().get());
 	}
 }

@@ -16,11 +16,14 @@ import org.springframework.stereotype.Service;
 
 import com.dtw.commons.dto.AssignmentDto;
 import com.dtw.commons.dto.CourseDto;
+import com.dtw.commons.dto.HomeworkDto;
 import com.dtw.commons.enums.ReturnStatus;
 import com.dtw.course.client.AssignmentClient;
 import com.dtw.course.entity.Course;
 import com.dtw.course.repo.CourseRepo;
+import com.google.common.reflect.TypeToken;
 
+import feign.FeignException;
 import feign.gson.GsonDecoder;
 
 @Service
@@ -147,6 +150,52 @@ public class CourseService {
 		return ReturnStatus.OK;
 	}
 	
+	//homework
+	public Pair<Optional<List<HomeworkDto>>, ReturnStatus> getAllHomeworkOfAssignmentOfCourse(Long courseId, Long assignmentId,
+			String token, OAuth2Authentication auth) throws IOException {
+		
+		Optional<Course> optCourse = courseRepo.findById(courseId);
+		if(optCourse.isEmpty()) {
+			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_NOT_FOUND);
+		}
+		
+		Course course = optCourse.get();
+		if(!(isAdmin(auth) || (isTeacher(auth) && isEnrolledInCourse(course, (String) auth.getPrincipal())))) {
+			return Pair.of(Optional.empty(), ReturnStatus.FORBIDDEN);
+		}
+		
+		if(!course.getAssignments().contains(assignmentId)) {
+			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY);
+		}
+		
+		@SuppressWarnings("unchecked")
+		List<HomeworkDto> homeworkList = (List<HomeworkDto>) gsonDecoder.decode(assignmentClient.getAllHomeworkForAssignment(assignmentId, token), 
+				new TypeToken<List<HomeworkDto>>() {private static final long serialVersionUID = 1L;}.getType());
+		return Pair.of(Optional.of(homeworkList), ReturnStatus.OK);
+	}
+	
+	public Pair<Optional<HomeworkDto>, ReturnStatus> getOneHomeworkOfAssignmentFromCourse(Long courseId, Long assignmentId, Long homeworkId,
+			String token, OAuth2Authentication auth) throws IOException, FeignException {
+		
+		Optional<Course> optCourse = courseRepo.findById(courseId);
+		if(optCourse.isEmpty()) {
+			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_NOT_FOUND);
+		}
+		
+		Course course = optCourse.get();
+		if(!course.getAssignments().contains(assignmentId)) {
+			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY);
+		}
+		
+		HomeworkDto homework = (HomeworkDto) gsonDecoder.decode(assignmentClient.getOneHomeworkFromAssigment(assignmentId, homeworkId, token), HomeworkDto.class);
+		if(!(isAdmin(auth) || (isTeacher(auth) && isEnrolledInCourse(course, (String) auth.getPrincipal())) || 
+				(isStudent(auth) && isEnrolledInCourse(course, (String) auth.getPrincipal()) && 
+						((String) auth.getPrincipal()).equals(homework.getUsername())))) {
+			return Pair.of(Optional.empty(), ReturnStatus.FORBIDDEN);
+		}
+		
+		return Pair.of(Optional.of(homework), ReturnStatus.OK);
+	}
 	
 	//util
 	public List<CourseDto> toDtoList(List<Course> courses) {
