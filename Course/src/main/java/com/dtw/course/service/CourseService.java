@@ -10,10 +10,17 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.util.Pair;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.dtw.commons.dto.AssignmentDto;
 import com.dtw.commons.dto.CourseDto;
@@ -22,6 +29,9 @@ import com.dtw.commons.enums.ReturnStatus;
 import com.dtw.course.client.AssignmentClient;
 import com.dtw.course.entity.Course;
 import com.dtw.course.repo.CourseRepo;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class CourseService {
@@ -32,6 +42,12 @@ public class CourseService {
 	@Autowired
 	@Qualifier("mvcConversionService")
 	private ConversionService conversionService;
+	
+	@Autowired
+	private RestTemplate restTemplate;
+	
+	@Autowired
+	private ObjectMapper objectMapper;
 	
 	@Autowired
 	private AssignmentClient assignmentClient;
@@ -215,7 +231,57 @@ public class CourseService {
 		return Pair.of(Optional.of(responseEntity), ReturnStatus.OK);
 	}
 	
+	public Pair<Optional<Course>, ReturnStatus> uploadHomeworkToAssignmentFromCourse(Long courseId, Long assignmentId, MultipartFile file,
+			OAuth2Authentication auth, String token) throws JsonMappingException, JsonProcessingException {
+		
+		Optional<Course> optCourse = courseRepo.findById(courseId);
+		if(optCourse.isEmpty()) {
+			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_NOT_FOUND);
+		}
+		
+		Course course = optCourse.get();
+		if(!course.getAssignments().contains(assignmentId)) {
+			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY);
+		}
+		
+		if(!(isAdmin(auth) || (isStudent(auth) && isEnrolledInCourse(course, (String) auth.getPrincipal())))) {
+			return Pair.of(Optional.empty(), ReturnStatus.FORBIDDEN);
+		}
+		
+		//check if user has already submited a homework for this assignment
+		String adminToken = "Bearer " + getAdminToken();
+		List<HomeworkDto> homeworkList = assignmentClient.getAllHomeworkForAssignment(assignmentId, adminToken);
+		for(HomeworkDto homework : homeworkList) {
+			if(homework.getUsername().equals((String) auth.getPrincipal())) {
+				return Pair.of(Optional.empty(), ReturnStatus.ENTITY_ALREADY_CONTAINS_ENTITY);
+			}
+		}
+		
+		assignmentClient.uploadHomeworkToAssignment(assignmentId, (String) auth.getPrincipal(), file, token);
+		return Pair.of(Optional.of(optCourse.get()), ReturnStatus.OK);
+	}
+	
 	//util
+	public String getAdminToken() throws JsonMappingException, JsonProcessingException {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		
+		String url = "http://localhost:8282/oauth/token";
+		String grantType = "password";
+		String adminUsername = "admin";
+		String adminPassword = "admin";
+		
+		MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+		map.add("grant_type", grantType);
+		map.add("username", adminUsername);
+		map.add("password", adminPassword);
+		
+		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+		ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+		
+		return objectMapper.readTree(response.getBody()).path("access_token").asText();
+	}
+	
 	public List<CourseDto> toDtoList(List<Course> courses) {
 
 		List<CourseDto> res = new ArrayList<>();

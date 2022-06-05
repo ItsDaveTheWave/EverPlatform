@@ -45,7 +45,7 @@ public interface AssignmentClient {
 			@RequestHeader("Authorization") String token);
 	
 	@PostMapping(value = "/api/assignment/{id}/homework/{username}", consumes = "multipart/form-data")
-	public HomeworkDto uploadHomeworkToAssignment(@PathVariable Long id, @PathVariable String username, @RequestPart MultipartFile file, 
+	public AssignmentDto uploadHomeworkToAssignment(@PathVariable Long id, @PathVariable String username, @RequestPart MultipartFile file, 
 			@RequestHeader("Authorization") String token);
 	
 	@DeleteMapping("/api/assignment/{id}/homework/{homeworkId}")
