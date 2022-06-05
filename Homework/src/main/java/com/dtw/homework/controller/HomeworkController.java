@@ -67,6 +67,7 @@ public class HomeworkController {
 			Homework homework = optHomework.get();
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.add("Content-Disposition", "attachment; filename=\"" + homework.getFileName() + "." + homework.getFileExtension() + "\"");
+			responseHeaders.add("Owner-Username", homework.getUsername());
 			
 			return ResponseEntity.ok()
 					.headers(responseHeaders)

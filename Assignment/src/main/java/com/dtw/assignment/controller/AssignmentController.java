@@ -134,6 +134,7 @@ public class AssignmentController {
 		ResponseEntity<ByteArrayResource> downloadResponse = pair.getFirst().get();
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Disposition", downloadResponse.getHeaders().getFirst("Content-Disposition"));
+		responseHeaders.add("Owner-Username", downloadResponse.getHeaders().getFirst("Owner-Username"));
 		
 		return ResponseEntity.ok()
 				.headers(responseHeaders)
