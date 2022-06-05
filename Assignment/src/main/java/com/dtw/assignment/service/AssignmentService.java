@@ -2,9 +2,7 @@ package com.dtw.assignment.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 
@@ -13,7 +11,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.util.Pair;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,9 +21,6 @@ import com.dtw.assignment.repo.AssignmentRepo;
 import com.dtw.commons.dto.AssignmentDto;
 import com.dtw.commons.dto.HomeworkDto;
 import com.dtw.commons.enums.ReturnStatus;
-
-import feign.Response;
-import feign.gson.GsonDecoder;
 
 @Service
 public class AssignmentService {
@@ -40,9 +34,6 @@ public class AssignmentService {
 	
 	@Autowired
 	private HomeworkClient homeworkClient;
-	
-	@Autowired
-	private GsonDecoder gsonDecoder;
 	
 	
 	public List<Assignment> getAll() {
@@ -77,7 +68,7 @@ public class AssignmentService {
 		
 		List<HomeworkDto> homeworkList = new ArrayList<>();
 		for(Long homeworkId : optAssignment.get().getHomeworkIds()) {
-			homeworkList.add((HomeworkDto) gsonDecoder.decode(homeworkClient.getOne(homeworkId, token), HomeworkDto.class));
+			homeworkList.add(homeworkClient.getOne(homeworkId, token));
 		}
 		
 		return Optional.of(homeworkList);
@@ -94,7 +85,7 @@ public class AssignmentService {
 			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY);
 		}
 		
-		HomeworkDto homework = (HomeworkDto) gsonDecoder.decode(homeworkClient.getOne(homeworkId, token), HomeworkDto.class);
+		HomeworkDto homework = homeworkClient.getOne(homeworkId, token);
 		return Pair.of(Optional.of(homework), ReturnStatus.OK);
 	}
 	
@@ -109,15 +100,10 @@ public class AssignmentService {
 			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY);
 		}
 		
-		Response feignResponse = homeworkClient.download(homeworkId, token);
-		ByteArrayResource fileBytes = new ByteArrayResource(feignResponse.body().asInputStream().readAllBytes());
-		HttpHeaders headers = new HttpHeaders();
-		for(Entry<String, Collection<String>> headerEntry : feignResponse.headers().entrySet()) {
-			headers.add(headerEntry.getKey(), headerEntry.getValue().iterator().next());
-		}
-		ResponseEntity<ByteArrayResource> responseEntity = ResponseEntity.status(feignResponse.status())
-				.headers(new HttpHeaders(headers))
-				.body(fileBytes);
+		ResponseEntity<ByteArrayResource> response = homeworkClient.download(homeworkId, token);
+		ResponseEntity<ByteArrayResource> responseEntity = ResponseEntity.status(response.getStatusCode())
+				.headers(response.getHeaders())
+				.body(response.getBody());
 		
 		return Pair.of(Optional.of(responseEntity), ReturnStatus.OK);
 	}
@@ -134,7 +120,7 @@ public class AssignmentService {
 			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_WITH_USERNAME_ALREADY_EXISTS);
 		}
 		
-		HomeworkDto homework = (HomeworkDto) gsonDecoder.decode(homeworkClient.upload(file, username, token), HomeworkDto.class);
+		HomeworkDto homework = homeworkClient.upload(file, username, token);
 		
 		Assignment assignment = optAssignment.get();
 		assignment.getHomeworkIds().add(homework.getId());

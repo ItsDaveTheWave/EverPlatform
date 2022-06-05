@@ -9,11 +9,12 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.dtw.assignment.config.FeignDecoder;
 import com.dtw.assignment.util.AssignmentToDtoConverter;
 import com.dtw.assignment.util.DtoToAssignmentConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import feign.gson.GsonDecoder;
+import feign.codec.Decoder;
 
 @SpringBootApplication
 @EnableEurekaClient
@@ -37,7 +38,7 @@ public class AssignmentServiceApplication implements WebMvcConfigurer {
 	}
 	
 	@Bean
-	public GsonDecoder gsonDecoder() {
-		return new GsonDecoder();
+	public Decoder decoder() {
+		return new FeignDecoder();
 	}
 }

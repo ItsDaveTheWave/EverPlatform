@@ -21,10 +21,7 @@ import com.dtw.commons.enums.ReturnStatus;
 import com.dtw.course.client.AssignmentClient;
 import com.dtw.course.entity.Course;
 import com.dtw.course.repo.CourseRepo;
-import com.google.common.reflect.TypeToken;
-
 import feign.FeignException;
-import feign.gson.GsonDecoder;
 
 @Service
 public class CourseService {
@@ -35,9 +32,6 @@ public class CourseService {
 	@Autowired
 	@Qualifier("mvcConversionService")
 	private ConversionService conversionService;
-	
-	@Autowired
-	private GsonDecoder gsonDecoder;
 	
 	@Autowired
 	private AssignmentClient assignmentClient;
@@ -81,7 +75,7 @@ public class CourseService {
 		
 		List<AssignmentDto> assignmentList = new ArrayList<>();
 		for(Long assignmentId : optCourse.get().getAssignments()) {
-			assignmentList.add((AssignmentDto) gsonDecoder.decode(assignmentClient.getOne(assignmentId, token), AssignmentDto.class));
+			assignmentList.add(assignmentClient.getOne(assignmentId, token));
 		}
 		
 		return Pair.of(Optional.of(assignmentList), ReturnStatus.OK);
@@ -103,7 +97,7 @@ public class CourseService {
 			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY);
 		}
 		
-		AssignmentDto assignment = (AssignmentDto) gsonDecoder.decode(assignmentClient.getOne(assignmentId, token), AssignmentDto.class);
+		AssignmentDto assignment = assignmentClient.getOne(assignmentId, token);
 		return Pair.of(Optional.of(assignment), ReturnStatus.OK);
 	}
 	
@@ -119,7 +113,7 @@ public class CourseService {
 			return Pair.of(Optional.empty(), ReturnStatus.FORBIDDEN);
 		}
 		
-		AssignmentDto savedAssignment = (AssignmentDto) gsonDecoder.decode(assignmentClient.create(assignmentDto, token), AssignmentDto.class);
+		AssignmentDto savedAssignment = assignmentClient.create(assignmentDto, token);
 		Course course = optCourse.get();
 		course.getAssignments().add(savedAssignment.getId());
 		
@@ -168,9 +162,7 @@ public class CourseService {
 			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY);
 		}
 		
-		@SuppressWarnings("unchecked")
-		List<HomeworkDto> homeworkList = (List<HomeworkDto>) gsonDecoder.decode(assignmentClient.getAllHomeworkForAssignment(assignmentId, token), 
-				new TypeToken<List<HomeworkDto>>() {private static final long serialVersionUID = 1L;}.getType());
+		List<HomeworkDto> homeworkList = assignmentClient.getAllHomeworkForAssignment(assignmentId, token);
 		return Pair.of(Optional.of(homeworkList), ReturnStatus.OK);
 	}
 	
@@ -187,7 +179,7 @@ public class CourseService {
 			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY);
 		}
 		
-		HomeworkDto homework = (HomeworkDto) gsonDecoder.decode(assignmentClient.getOneHomeworkFromAssigment(assignmentId, homeworkId, token), HomeworkDto.class);
+		HomeworkDto homework = assignmentClient.getOneHomeworkFromAssigment(assignmentId, homeworkId, token);
 		if(!(isAdmin(auth) || (isTeacher(auth) && isEnrolledInCourse(course, (String) auth.getPrincipal())) || 
 				(isStudent(auth) && isEnrolledInCourse(course, (String) auth.getPrincipal()) && 
 						((String) auth.getPrincipal()).equals(homework.getUsername())))) {
