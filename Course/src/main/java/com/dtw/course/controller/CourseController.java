@@ -1,6 +1,5 @@
 package com.dtw.course.controller;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,13 +85,7 @@ public class CourseController {
 	public ResponseEntity<?> getAllAssignmentFromCourse(@PathVariable Long id, @RequestHeader("Authorization") String token, 
 			OAuth2Authentication auth) {
 		
-		Pair<Optional<List<AssignmentDto>>, ReturnStatus> pair;		
-		try {
-			pair = courseService.getAllAssignmentOfCourse(id, token, auth);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+		Pair<Optional<List<AssignmentDto>>, ReturnStatus> pair = courseService.getAllAssignmentOfCourse(id, token, auth);
 		
 		if(pair.getSecond() != ReturnStatus.OK) {
 			if(pair.getSecond() == ReturnStatus.ENTITY_NOT_FOUND) {
@@ -116,13 +109,7 @@ public class CourseController {
 	public ResponseEntity<?> getOneAssignmentFromCourse(@PathVariable Long id, @PathVariable Long assignmentId, 
 			@RequestHeader("Authorization") String token, OAuth2Authentication auth) {
 		
-		Pair<Optional<AssignmentDto>, ReturnStatus> pair;
-		try {
-			pair = courseService.getOneAssignmentOfCourse(id, assignmentId, token, auth);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+		Pair<Optional<AssignmentDto>, ReturnStatus> pair = courseService.getOneAssignmentOfCourse(id, assignmentId, token, auth);
 		
 		if(pair.getSecond() != ReturnStatus.OK) {
 			if(pair.getSecond() == ReturnStatus.ENTITY_NOT_FOUND) {
@@ -144,13 +131,7 @@ public class CourseController {
 	public ResponseEntity<?> addAssignmentToCourse(@PathVariable Long id, @RequestBody @Valid AssignmentDto assignment,
 			@RequestHeader("Authorization") String token, OAuth2Authentication auth) {
 		
-		Pair<Optional<Course>, ReturnStatus> pair;
-		try {
-			pair = courseService.addAssignmentToCourse(id, assignment, token, auth);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+		Pair<Optional<Course>, ReturnStatus> pair = courseService.addAssignmentToCourse(id, assignment, token, auth);
 		
 		if(pair.getSecond() != ReturnStatus.OK) {
 			if(pair.getSecond() == ReturnStatus.ENTITY_NOT_FOUND) {
@@ -186,13 +167,7 @@ public class CourseController {
 	public ResponseEntity<?> getAllHomeworkFromAssignmentOfCourse(@PathVariable Long id, @PathVariable Long assignmentId, 
 			@RequestHeader("Authorization") String token, OAuth2Authentication auth) {
 		
-		Pair<Optional<List<HomeworkDto>>, ReturnStatus> pair;
-		try {
-			pair = courseService.getAllHomeworkOfAssignmentOfCourse(id, assignmentId, token, auth);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+		Pair<Optional<List<HomeworkDto>>, ReturnStatus> pair = courseService.getAllHomeworkOfAssignmentOfCourse(id, assignmentId, token, auth);
 		
 		if(pair.getSecond() != ReturnStatus.OK) {
 			if(pair.getSecond() == ReturnStatus.ENTITY_NOT_FOUND) {
@@ -219,13 +194,7 @@ public class CourseController {
 	public ResponseEntity<?> getOneHomeworkFromAssignmentFromCourse(@PathVariable Long id, @PathVariable Long assignmentId, 
 			@PathVariable Long homeworkId, @RequestHeader("Authorization") String token, OAuth2Authentication auth) {
 		
-		Pair<Optional<HomeworkDto>, ReturnStatus> pair;
-		try {
-			pair = courseService.getOneHomeworkOfAssignmentFromCourse(id, assignmentId, homeworkId, token, auth);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+		Pair<Optional<HomeworkDto>, ReturnStatus> pair = courseService.getOneHomeworkOfAssignmentFromCourse(id, assignmentId, homeworkId, token, auth);
 		
 		if(pair.getSecond() != ReturnStatus.OK) {
 			if(pair.getSecond() == ReturnStatus.ENTITY_NOT_FOUND) {

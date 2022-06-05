@@ -1,6 +1,5 @@
 package com.dtw.assignment.controller;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,13 +85,7 @@ public class AssignmentController {
 	@GetMapping("/{id}/homework")
 	public ResponseEntity<?> getAllHomeworkForAssignment(@PathVariable Long id, @RequestHeader("Authorization") String token) {
 
-		Optional<List<HomeworkDto>> optList;
-		try {
-			optList = assignmentService.getAllHomeworkOfAssignment(id, token);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+		Optional<List<HomeworkDto>> optList = assignmentService.getAllHomeworkOfAssignment(id, token);
 		if(optList.isEmpty()) {
 			return ApiError.entityNotFound("Assignment", "id", id).buildResponseEntity();
 		}
@@ -109,13 +102,7 @@ public class AssignmentController {
 	public ResponseEntity<?> getOneHomeworkFromAssigment(@PathVariable Long id, @PathVariable Long homeworkId,
 			@RequestHeader("Authorization") String token) {
 		
-		Pair<Optional<HomeworkDto>, ReturnStatus> pair;
-		try {
-			pair = assignmentService.getOneHomeworkFromAssignment(id, homeworkId, token);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+		Pair<Optional<HomeworkDto>, ReturnStatus> pair = assignmentService.getOneHomeworkFromAssignment(id, homeworkId, token);
 		if(pair.getSecond() != ReturnStatus.OK) {
 			if(pair.getSecond() == ReturnStatus.ENTITY_NOT_FOUND) {
 				return ApiError.entityNotFound("Assignment", "id", id).buildResponseEntity();
@@ -133,13 +120,7 @@ public class AssignmentController {
 	public ResponseEntity<?> downloadOneHomeworkFromAssignment(@PathVariable Long id, @PathVariable Long homeworkId,
 			@RequestHeader("Authorization") String token) {
 		
-		Pair<Optional<ResponseEntity<ByteArrayResource>>, ReturnStatus> pair;
-		try {
-			pair = assignmentService.downloadOneHomeworkFromAssignment(id, homeworkId, token);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+		Pair<Optional<ResponseEntity<ByteArrayResource>>, ReturnStatus> pair = assignmentService.downloadOneHomeworkFromAssignment(id, homeworkId, token);
 		if(pair.getSecond() != ReturnStatus.OK) {
 			if(pair.getSecond() == ReturnStatus.ENTITY_NOT_FOUND) {
 				return ApiError.entityNotFound("Assignment", "id", id).buildResponseEntity();
@@ -163,13 +144,7 @@ public class AssignmentController {
 	public ResponseEntity<?> uploadHomeworkToAssignment(@PathVariable Long id, @PathVariable String username, @RequestParam MultipartFile file, 
 			@RequestHeader("Authorization") String token) {
 		
-		Pair<Optional<Assignment>, ReturnStatus> pair;
-		try {
-			pair = assignmentService.uploadHomeworkToAssignment(id, file, username, token);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+		Pair<Optional<Assignment>, ReturnStatus> pair = assignmentService.uploadHomeworkToAssignment(id, file, username, token);
 		if(pair.getSecond() != ReturnStatus.OK) {
 			if(pair.getSecond() == ReturnStatus.ENTITY_NOT_FOUND) {
 				return ApiError.entityNotFound("Assignment", "id", id).buildResponseEntity();

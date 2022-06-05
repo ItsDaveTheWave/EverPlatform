@@ -1,6 +1,5 @@
 package com.dtw.course.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +20,6 @@ import com.dtw.commons.enums.ReturnStatus;
 import com.dtw.course.client.AssignmentClient;
 import com.dtw.course.entity.Course;
 import com.dtw.course.repo.CourseRepo;
-import feign.FeignException;
 
 @Service
 public class CourseService {
@@ -62,7 +60,7 @@ public class CourseService {
 	
 	//assignment
 	public Pair<Optional<List<AssignmentDto>>, ReturnStatus> getAllAssignmentOfCourse(Long courseId, String token, 
-			OAuth2Authentication auth) throws IOException {
+			OAuth2Authentication auth) {
 		
 		Optional<Course> optCourse = courseRepo.findById(courseId);
 		if(optCourse.isEmpty()) {
@@ -82,7 +80,7 @@ public class CourseService {
 	}
 	
 	public Pair<Optional<AssignmentDto>, ReturnStatus> getOneAssignmentOfCourse(Long courseId, Long assignmentId, String token, 
-			OAuth2Authentication auth) throws IOException {
+			OAuth2Authentication auth) {
 		
 		Optional<Course> optCourse = courseRepo.findById(courseId);
 		if(optCourse.isEmpty()) {
@@ -102,7 +100,7 @@ public class CourseService {
 	}
 	
 	public Pair<Optional<Course>, ReturnStatus> addAssignmentToCourse(Long courseId, AssignmentDto assignmentDto, String token, 
-			OAuth2Authentication auth) throws IOException {
+			OAuth2Authentication auth) {
 		
 		Optional<Course> optCourse = courseRepo.findById(courseId);
 		if(optCourse.isEmpty()) {
@@ -146,7 +144,7 @@ public class CourseService {
 	
 	//homework
 	public Pair<Optional<List<HomeworkDto>>, ReturnStatus> getAllHomeworkOfAssignmentOfCourse(Long courseId, Long assignmentId,
-			String token, OAuth2Authentication auth) throws IOException {
+			String token, OAuth2Authentication auth) {
 		
 		Optional<Course> optCourse = courseRepo.findById(courseId);
 		if(optCourse.isEmpty()) {
@@ -167,7 +165,7 @@ public class CourseService {
 	}
 	
 	public Pair<Optional<HomeworkDto>, ReturnStatus> getOneHomeworkOfAssignmentFromCourse(Long courseId, Long assignmentId, Long homeworkId,
-			String token, OAuth2Authentication auth) throws IOException, FeignException {
+			String token, OAuth2Authentication auth) {
 		
 		Optional<Course> optCourse = courseRepo.findById(courseId);
 		if(optCourse.isEmpty()) {

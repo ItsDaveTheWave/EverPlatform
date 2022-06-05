@@ -1,6 +1,5 @@
 package com.dtw.assignment.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -59,7 +58,7 @@ public class AssignmentService {
 	}
 	
 	//homework
-	public Optional<List<HomeworkDto>> getAllHomeworkOfAssignment(Long assignmentId, String token) throws IOException {
+	public Optional<List<HomeworkDto>> getAllHomeworkOfAssignment(Long assignmentId, String token) {
 		
 		Optional<Assignment> optAssignment = assignmentRepo.findById(assignmentId);
 		if(optAssignment.isEmpty()) {
@@ -74,7 +73,7 @@ public class AssignmentService {
 		return Optional.of(homeworkList);
 	}
 	
-	public Pair<Optional<HomeworkDto>, ReturnStatus> getOneHomeworkFromAssignment(Long assignmentId, Long homeworkId, String token) throws IOException {
+	public Pair<Optional<HomeworkDto>, ReturnStatus> getOneHomeworkFromAssignment(Long assignmentId, Long homeworkId, String token) {
 
 		Optional<Assignment> optAssignment = assignmentRepo.findById(assignmentId);
 		if(optAssignment.isEmpty()) {
@@ -89,7 +88,7 @@ public class AssignmentService {
 		return Pair.of(Optional.of(homework), ReturnStatus.OK);
 	}
 	
-	public Pair<Optional<ResponseEntity<ByteArrayResource>>, ReturnStatus> downloadOneHomeworkFromAssignment(Long assignmentId, Long homeworkId, String token) throws IOException {
+	public Pair<Optional<ResponseEntity<ByteArrayResource>>, ReturnStatus> downloadOneHomeworkFromAssignment(Long assignmentId, Long homeworkId, String token) {
 		
 		Optional<Assignment> optAssignment = assignmentRepo.findById(assignmentId);
 		if(optAssignment.isEmpty()) {
@@ -108,7 +107,7 @@ public class AssignmentService {
 		return Pair.of(Optional.of(responseEntity), ReturnStatus.OK);
 	}
 	
-	public Pair<Optional<Assignment>, ReturnStatus> uploadHomeworkToAssignment(Long assignmentId, MultipartFile file, String username, String token) throws IOException {
+	public Pair<Optional<Assignment>, ReturnStatus> uploadHomeworkToAssignment(Long assignmentId, MultipartFile file, String username, String token) {
 		
 		Optional<Assignment> optAssignment = assignmentRepo.findById(assignmentId);
 		if(optAssignment.isEmpty()) {
