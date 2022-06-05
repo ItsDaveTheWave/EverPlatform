@@ -8,7 +8,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.util.Pair;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -210,5 +212,34 @@ public class CourseController {
 		}
 		
 		return ResponseEntity.ok(pair.getFirst().get());
+	}
+	
+	@GetMapping("/{id}/assignment/{assignmentId}/homework/{homeworkId}/download")
+	public ResponseEntity<?> downloadOneHomeworkFromAssignmentFromCourse(@PathVariable Long id, @PathVariable Long assignmentId, 
+			@PathVariable Long homeworkId, @RequestHeader("Authorization") String token, OAuth2Authentication auth) {
+		
+		Pair<Optional<ResponseEntity<ByteArrayResource>>, ReturnStatus> pair = courseService.downloadOneHomeworkOfAssignmentFromCourse(id, assignmentId, homeworkId, token, auth);
+		
+		if(pair.getSecond() != ReturnStatus.OK) {
+			if(pair.getSecond() == ReturnStatus.ENTITY_NOT_FOUND) {
+				return ApiError.entityNotFound("Course", "id", id).buildResponseEntity();
+			}
+			if(pair.getSecond() == ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY) {
+				return ApiError.entityDoesntContainEntity("Course", "Assignment", "id", assignmentId).buildResponseEntity();
+			}
+			if(pair.getSecond() == ReturnStatus.FORBIDDEN) {
+				throw new AccessDeniedException("Access denied");
+			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		
+		ResponseEntity<ByteArrayResource> downloadResponse = pair.getFirst().get();
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Disposition", downloadResponse.getHeaders().getFirst("Content-Disposition"));
+		responseHeaders.add("Owner-Username", downloadResponse.getHeaders().getFirst("Owner-Username"));
+		
+		return ResponseEntity.ok()
+				.headers(responseHeaders)
+				.body(downloadResponse.getBody());
 	}
 }

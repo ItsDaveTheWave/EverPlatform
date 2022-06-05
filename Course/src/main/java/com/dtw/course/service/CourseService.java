@@ -8,7 +8,9 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.util.Pair;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Service;
@@ -185,6 +187,32 @@ public class CourseService {
 		}
 		
 		return Pair.of(Optional.of(homework), ReturnStatus.OK);
+	}
+	
+	public Pair<Optional<ResponseEntity<ByteArrayResource>>, ReturnStatus> downloadOneHomeworkOfAssignmentFromCourse(Long courseId, Long assignmentId, Long homeworkId,
+			String token, OAuth2Authentication auth) {
+		
+		Optional<Course> optCourse = courseRepo.findById(courseId);
+		if(optCourse.isEmpty()) {
+			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_NOT_FOUND);
+		}
+		
+		Course course = optCourse.get();
+		if(!course.getAssignments().contains(assignmentId)) {
+			return Pair.of(Optional.empty(), ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY);
+		}
+		
+		ResponseEntity<ByteArrayResource> response = assignmentClient.downloadOneHomeworkFromAssignment(assignmentId, homeworkId, token);
+		if(!(isAdmin(auth) || (isTeacher(auth) && isEnrolledInCourse(course, (String) auth.getPrincipal())) || 
+				(isStudent(auth) && isEnrolledInCourse(course, (String) auth.getPrincipal()) && 
+						((String) auth.getPrincipal()).equals(response.getHeaders().getFirst("Owner-Username"))))) {
+			return Pair.of(Optional.empty(), ReturnStatus.FORBIDDEN);
+		}
+		
+		ResponseEntity<ByteArrayResource> responseEntity = ResponseEntity.status(response.getStatusCode())
+				.headers(response.getHeaders())
+				.body(response.getBody());
+		return Pair.of(Optional.of(responseEntity), ReturnStatus.OK);
 	}
 	
 	//util

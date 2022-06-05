@@ -138,7 +138,7 @@ public class AssignmentController {
 		
 		return ResponseEntity.ok()
 				.headers(responseHeaders)
-				.body(pair.getFirst().get().getBody());
+				.body(downloadResponse.getBody());
 	}
 	
 	@PostMapping("/{id}/homework/{username}")
