@@ -273,7 +273,7 @@ public class CourseService {
 			return ReturnStatus.ENTITY_DOESNT_CONTAIN_ENTITY;
 		}
 		
-		//TODO: if if returns empty doest contain entity, return ok
+		//TODO: if returns doest contain entity, return ok
 		HomeworkDto homework = assignmentClient.getOneHomeworkFromAssigment(assignmentId, homeworkId, token);
 		if(!(isAdmin(auth) || (isStudent(auth) && isEnrolledInCourse(course, (String) auth.getPrincipal()) 
 				&& homework.getUsername().equals((String) auth.getPrincipal())))) {

@@ -35,7 +35,8 @@ public class AuthServerConfig implements AuthorizationServerConfigurer {
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 		security
 			.checkTokenAccess("isAuthenticated()")
-			.tokenKeyAccess("permitAll()");
+			.tokenKeyAccess("permitAll()")
+			.addTokenEndpointAuthenticationFilter(new CorsCustomFilter());
 	}
 
 	@Override
