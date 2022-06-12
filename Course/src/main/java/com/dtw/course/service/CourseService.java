@@ -284,6 +284,37 @@ public class CourseService {
 		return ReturnStatus.OK;
 	}
 	
+	//user
+	public Optional<List<Course>> getAllCoursesOfStudent(String username, OAuth2Authentication auth) {
+		
+		if(!(isAdmin(auth) || (isStudent(auth) && ((String) auth.getPrincipal()).equals(username)))) {
+			return Optional.empty();
+		}
+		
+		List<Course> courseList = new ArrayList<>();
+		courseRepo.findAll().forEach(course -> {
+			if(course.getStudents().contains(username)) {
+				courseList.add(course);
+			}
+		});
+		return Optional.of(courseList);
+	}
+	
+	public Optional<List<Course>> getAllCoursesOfTeacher(String username, OAuth2Authentication auth) {
+		
+		if(!(isAdmin(auth) || (isStudent(auth) && ((String) auth.getPrincipal()).equals(username)))) {
+			return Optional.empty();
+		}
+		
+		List<Course> courseList = new ArrayList<>();
+		courseRepo.findAll().forEach(course -> {
+			if(course.getTeacher().equals(username)) {
+				courseList.add(course);
+			}
+		});
+		return Optional.of(courseList);
+	}
+	
 	//util
 	public String getAdminToken() throws JsonMappingException, JsonProcessingException {
 		HttpHeaders headers = new HttpHeaders();

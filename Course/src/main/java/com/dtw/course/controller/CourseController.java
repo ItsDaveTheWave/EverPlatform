@@ -297,4 +297,35 @@ public class CourseController {
 		
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
+	
+	//user
+	@GetMapping("/student/{username}")
+	public ResponseEntity<List<CourseDto>> getAllCourseOfStudent(@PathVariable String username, OAuth2Authentication auth) {
+		Optional<List<Course>> optCourseList = courseService.getAllCoursesOfStudent(username, auth);
+		if(optCourseList.isEmpty()) {
+			throw new AccessDeniedException("Access denied");
+		}
+		
+		List<Course> courseList = optCourseList.get();
+		if(courseList.size() == 0) {
+			return new ResponseEntity<List<CourseDto>>(HttpStatus.NO_CONTENT);
+		}
+		
+		return ResponseEntity.ok(courseService.toDtoList(courseList));
+	}
+	
+	@GetMapping("/teacher/{username}")
+	public ResponseEntity<List<CourseDto>> getAllCourseOfTeacher(@PathVariable String username, OAuth2Authentication auth) {
+		Optional<List<Course>> optCourseList = courseService.getAllCoursesOfTeacher(username, auth);
+		if(optCourseList.isEmpty()) {
+			throw new AccessDeniedException("Access denied");
+		}
+		
+		List<Course> courseList = optCourseList.get();
+		if(courseList.size() == 0) {
+			return new ResponseEntity<List<CourseDto>>(HttpStatus.NO_CONTENT);
+		}
+		
+		return ResponseEntity.ok(courseService.toDtoList(courseList));
+	}
 }
